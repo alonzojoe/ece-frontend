@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayout from "@/layouts/RootLayout";
-import Dashboard from "@/pages/Dashboard/Dashboard";
-import Borrowers from "@/pages/Borrowers/Borrowers";
+import Sensors from "@/pages/Sensors/Sensors";
 import ProtectedRoutes from "@/middleware/ProtectedRoutes";
 import Auth from "@/pages/Auth/Auth";
+import Borrowers from "./pages/Borrowers/Borrowers";
 function App() {
   return (
     <BrowserRouter>
@@ -11,7 +11,7 @@ function App() {
         <Route path="" element={<Auth />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="home" element={<RootLayout />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<Sensors />} />
             <Route path="borrowers" element={<Borrowers />} />
           </Route>
         </Route>

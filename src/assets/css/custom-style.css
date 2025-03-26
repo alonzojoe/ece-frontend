@@ -269,9 +269,55 @@ button:disabled {
 }
 
 
-/* .nav-menu-x {
+.nav-menu-x {
   visibility: hidden !important;
-} */
+}
+
+.badge-red {
+  padding: 0.49rem 1em;
+  background: #E5484C;
+  font-size: 0.81rem;
+  border-radius: 0.25rem;
+  color: #fff;
+}
+
+.badge-green {
+  padding: 0.49rem 1em;
+  background: #2FC66E;
+  font-size: 0.81rem;
+  border-radius: 0.25rem;
+  color: #fff;
+}
+
+.badge-yellow {
+  padding: 0.49rem 1em;
+  background: #F9BE39;
+  font-size: 0.81rem;
+  border-radius: 0.25rem;
+  color: #fff;
+}
+
+.nav-x-container {
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.nav-x-container.active {
+  background: #3590E2;
+}
+
+.nav-menu-x {
+  bottom: 5px !important;
+}
+
+.nav-menu-x .nav-menu-x-child {
+  border-radius: 1rem !important;
+  background: #21213C;
+}
 
 @media screen and (max-width: 768px) {
   .nav-menu-x {

@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import useToggle from "@/hooks/useToggle";
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import Navbar from "@/layouts/components/Navbar";
 import Sidebar from "@/layouts/components/Sidebar";
+import { MENUS } from "@/constants";
 
 const RootLayout = () => {
   const [sideBar, toggleSidebar] = useToggle(false);
-
+  const selectedId = 3;
   useEffect(() => {
     console.log(`side bar triggered`);
     const htmlEl = document.documentElement;
@@ -48,11 +49,20 @@ const RootLayout = () => {
             <div className="content-backdrop fade"></div>
           </div>
           {/* Content wrapper */}
-          <div className="nav-menu-x position-fixed text-white w-100 bg-primary px-5 py-4 bottom-0 d-flex justify-content-between align-items-center">
-            <div>A</div>
-            <div>A</div>
-            <div>A</div>
-            <div>A</div>
+          <div className="nav-menu-x position-fixed w-100 bottom-0">
+            <div className="nav-menu-x-child mx-2 rounded-4 px-5 py-3 d-flex justify-content-between align-items-center">
+              {MENUS.map((menu) => (
+                <Link to={`/home${menu.path}`} key={menu.id}>
+                  <span
+                    className={`nav-x-container ${
+                      menu.id === selectedId ? "active" : ""
+                    }`}
+                  >
+                    <i className={`${menu.icon} fs-2`} />
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
