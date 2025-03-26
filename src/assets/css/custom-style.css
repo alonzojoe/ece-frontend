@@ -269,9 +269,9 @@ button:disabled {
 }
 
 
-.nav-menu-x {
+/* .nav-menu-x {
   visibility: hidden !important;
-}
+} */
 
 @media screen and (max-width: 768px) {
   .nav-menu-x {

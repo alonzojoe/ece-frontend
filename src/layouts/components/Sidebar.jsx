@@ -1,4 +1,35 @@
+import { Link } from "react-router-dom";
+
+export const MENUS = [
+  {
+    id: 1,
+    name: "Sensor Data",
+    path: "/sensors",
+    icon: "ti ti-table-filled",
+  },
+  {
+    id: 2,
+    name: "Email Notification",
+    path: "/notify",
+    icon: "ti ti-mail-filled",
+  },
+  {
+    id: 3,
+    name: "User Management",
+    path: "/notify",
+    icon: "ti ti-user-filled",
+  },
+  {
+    id: 4,
+    name: "Settings",
+    path: "/settings",
+    icon: "ti ti-settings-filled",
+  },
+];
+
 const Sidebar = ({ toggleSidebar, isToggled }) => {
+  const selectedId = 1;
+
   return (
     <aside
       id="layout-menu"
@@ -56,36 +87,14 @@ const Sidebar = ({ toggleSidebar, isToggled }) => {
         <li className="menu-header small text-uppercase">
           <span className="menu-header-text">Home</span>
         </li>
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <i className="menu-icon tf-icons ti ti-dashboard"></i>
-            <div>Dashboard</div>
-          </a>
-        </li>
-        <li className="menu-item active">
-          <a href="#" className="menu-link">
-            <i className="menu-icon tf-icons ti ti-users-group"></i>
-            <div>Borrowers</div>
-          </a>
-        </li>
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <i className="menu-icon tf-icons ti ti-printer"></i>
-            <div>Reports</div>
-          </a>
-        </li>
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <i className="menu-icon tf-icons ti ti-settings"></i>
-            <div>System Settings</div>
-          </a>
-        </li>
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <i className="menu-icon tf-icons ti ti-users"></i>
-            <div>User Management</div>
-          </a>
-        </li>
+        {MENUS.map((menu) => (
+          <li className={`menu-item ${menu.id === selectedId ? 'active': ''}`} key={menu.id}>
+            <Link to={`/home/${menu.path}`} className="menu-link">
+              <i className={`menu-icon tf-icons ${menu.icon}`}></i>
+              <div>{menu.name}</div>
+            </Link>
+          </li>
+        ))}
         <li className="menu-header small text-uppercase">
           <span className="menu-header-text">Auth</span>
         </li>
