@@ -1,8 +1,48 @@
 import Modal from "@/components/UI/Modal";
 import Card from "@/components/UI/Card";
 import Pagination from "@/components/UI/Pagination";
+import useFetch from "@/hooks/useFetch";
+import { useState, useEffect } from "react";
+import echo from "@/services/sockets";
+import { Notification } from "@/libs/utils.jsx";
+
+const notif = new Notification();
 
 const Borrowers = () => {
+  const [params, setParams] = useState({
+    page: 1,
+    building_name: "",
+    load: "",
+    deflection: "",
+    angle_of_deflection: "",
+    status: 1,
+    randomizer: 0,
+  });
+
+  const { data: sensors, loading, error } = useFetch(`/sensor`, params);
+
+  useEffect(() => {
+    const channel = echo.channel("sensor-data");
+
+    channel.listen(".sensor.stored", (event) => {
+      console.log("New data has been stored:", event.sensorData);
+      notif.normal(`New data has been store: ${event.sensorData.load}`);
+      notif.warning(`New data has been store: ${event.sensorData.load}`);
+      notif.critical(`New data has been store: ${event.sensorData.load}`);
+      setParams((prev) => ({
+        ...prev,
+        randomizer: Date.now(),
+      }));
+    });
+
+    return () => {
+      channel.stopListening(".sensor.stored");
+      echo.leaveChannel("sensor-data");
+    };
+  }, []);
+
+  console.log("data", sensors, error);
+
   return (
     <>
       {1 + 3 == 2 && (
@@ -583,7 +623,14 @@ const Borrowers = () => {
                 }}
               >
                 <button className="btn btn-primary">Search</button>
-                <button className="btn btn-danger">Refresh</button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    notif.custom(`data has been inserted`);
+                  }}
+                >
+                  Refresh
+                </button>
               </div>
             </div>
           </div>
@@ -608,7 +655,7 @@ const Borrowers = () => {
                 <th className="text-center bg-primary text-white fw-bold p-2 m-0">
                   Angle of Deflection
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-1 m-0">
+                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
                   Status
                 </th>
                 <th className="text-center bg-primary text-white fw-bold p-2 m-0">
@@ -617,266 +664,81 @@ const Borrowers = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  10.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 10
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  1000
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  0.53
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  2.85
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-green me-1">Normal</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  9.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 9
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  3000
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  99.45
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  20.37
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-red me-1">Critical</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  8.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 8
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  300
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  0.33
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  10.45
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-green me-1">Warning</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  7.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 7
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  1200
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  0.78
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  5.34
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-green me-1">Normal</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  6.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 6
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  2500
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  45.67
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  8.90
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-red me-1">Critical</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  5.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 5
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  1800
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  12.34
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  15.42
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-yellow me-1">Warning</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  4.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 4
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  900
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  0.56
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  7.32
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-green me-1">Normal</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  3.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 3
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  2100
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  0.67
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  9.45
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-yellow me-1">Warning</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  2.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 2
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  3200
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  88.34
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  25.56
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-red me-1">Critical</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  1.
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  Building 1
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  1300
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  6.78
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  12.34
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <span className="badge-green me-1">Normal</span>
-                </td>
-                <td className="text-center align-middle fw-normal p-1 m-0">
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <button className="btn btn-warning btn-sm">Update</button>
-                    <button className="btn btn-danger btn-sm">Delete</button>
-                  </div>
-                </td>
-              </tr>
+              {loading && (
+                <tr>
+                  <td colSpan="7">
+                    <div className="d-flex align-items-center justify-content-center">
+                      <div className="d-flex align-items-center jusitfy-content-center">
+                        <div className="sk-wave sk-primary">
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+
+              {error && (
+                <tr>
+                  <td
+                    className="text-center align-middle fw-normal text-danger p-1 m-0"
+                    colSpan="7"
+                  >
+                    Something went wrong :(
+                  </td>
+                </tr>
+              )}
+
+              {!loading && !error && !sensors?.data?.length && (
+                <tr>
+                  <td
+                    className="text-center align-middle fw-normal p-1 m-0"
+                    colSpan="7"
+                  >
+                    No records found.
+                  </td>
+                </tr>
+              )}
+
+              {!loading &&
+                !error &&
+                sensors?.data?.length > 0 &&
+                sensors.data.map((s) => (
+                  <tr key={s.id}>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {s.id}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {s.building_name}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {s.load}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {s.deflection}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {s.angle_of_deflection}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      <span className="badge-green me-1">Normal</span>
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      <div className="d-flex align-items-center justify-content-center gap-2">
+                        <button className="btn btn-warning btn-sm">
+                          Update
+                        </button>
+                        <button className="btn btn-danger btn-sm">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <Pagination />

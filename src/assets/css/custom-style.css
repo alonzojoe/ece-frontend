@@ -311,12 +311,23 @@ button:disabled {
 }
 
 .nav-menu-x {
+  z-index: 99999;
   bottom: 5px !important;
 }
 
 .nav-menu-x .nav-menu-x-child {
   border-radius: 1rem !important;
   background: #21213C;
+  font-weight: 500 !important;
+}
+
+table>thead>tr>th {
+  text-transform: capitalize !important;
+}
+
+.notif-container {
+  overflow-y: auto;
+  height: 700px !important;
 }
 
 @media screen and (max-width: 768px) {

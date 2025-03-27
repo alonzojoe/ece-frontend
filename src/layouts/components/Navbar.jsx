@@ -1,4 +1,5 @@
-import defaultImage from "../../assets/images/avatar.jpeg";
+import ProfileSection from "@/layouts/components/ProfileSection";
+import Notifications from "./Notifications";
 
 const Navbar = ({ toggleSidebar, isToggled }) => {
   return (
@@ -32,16 +33,20 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
             </a>
           </li>
 
+          {/* notif */}
+          <Notifications />
+          {/* notif */}
+
           <li
             className="nav-item dropdown-language dropdown me-2 me-xl-0"
             id="user-name"
           >
             <a className="nav-link hide-arrow" href="#">
-              <h5 className="mt-3 fw-semibold">Joenell Alonzo</h5>
+              <h5 className="mt-3 fw-bolder">Joenell Alonzo</h5>
             </a>
           </li>
 
-          <li className="nav-item navbar-dropdown dropdown-user">
+          {/* <li className="nav-item navbar-dropdown dropdown-user">
             <a className="nav-link hide-arrow" href="#">
               <div className="avatar avatar-online">
                 <img
@@ -51,7 +56,8 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
                 />
               </div>
             </a>
-          </li>
+          </li> */}
+          <ProfileSection />
         </ul>
       </div>
     </nav>
