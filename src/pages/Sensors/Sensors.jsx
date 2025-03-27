@@ -2,7 +2,8 @@ import Modal from "@/components/UI/Modal";
 import Card from "@/components/UI/Card";
 import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import echo from "@/services/sockets";
 
 const Borrowers = () => {
   const [params, setParams] = useState({
@@ -12,9 +13,27 @@ const Borrowers = () => {
     deflection: "",
     angle_of_deflection: "",
     status: 1,
+    randomizer: 0,
   });
 
   const { data: sensors, loading, error } = useFetch(`/sensor`, params);
+
+  useEffect(() => {
+    const channel = echo.channel("sensor-data");
+
+    channel.listen(".sensor.stored", (event) => {
+      console.log("New data has been stored:", event.sensorData);
+      setParams((prev) => ({
+        ...prev,
+        randomizer: Date.now(),
+      }));
+    });
+
+    return () => {
+      channel.stopListening(".sensor.stored");
+      echo.leaveChannel("sensor-data");
+    };
+  }, []);
 
   console.log("data", sensors, error);
 
