@@ -623,7 +623,7 @@ const Borrowers = () => {
                 <th className="text-center bg-primary text-white fw-bold p-2 m-0">
                   Angle of Deflection
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-1 m-0">
+                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
                   Status
                 </th>
                 <th className="text-center bg-primary text-white fw-bold p-2 m-0">
@@ -632,8 +632,49 @@ const Borrowers = () => {
               </tr>
             </thead>
             <tbody>
+              {loading && (
+                <tr>
+                  <td colSpan="7">
+                    <div className="d-flex align-items-center justify-content-center">
+                      <div className="d-flex align-items-center jusitfy-content-center">
+                        <div className="sk-wave sk-primary">
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+
+              {error && (
+                <tr>
+                  <td
+                    className="text-center align-middle fw-normal text-danger p-1 m-0"
+                    colSpan="7"
+                  >
+                    Something went wrong :(
+                  </td>
+                </tr>
+              )}
+
+              {!loading && !error && !sensors?.data?.length && (
+                <tr>
+                  <td
+                    className="text-center align-middle fw-normal p-1 m-0"
+                    colSpan="7"
+                  >
+                    No records found.
+                  </td>
+                </tr>
+              )}
+
               {!loading &&
-                sensors &&
+                !error &&
+                sensors?.data?.length > 0 &&
                 sensors.data.map((s) => (
                   <tr key={s.id}>
                     <td className="text-center align-middle fw-normal p-1 m-0">
@@ -666,44 +707,6 @@ const Borrowers = () => {
                     </td>
                   </tr>
                 ))}
-
-              {!loading && sensors && !sensors.data.length === 0 && (
-                <tr>
-                  <td
-                    className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="7"
-                  >
-                    No records found.
-                  </td>
-                </tr>
-              )}
-              {error && (
-                <tr>
-                  <td
-                    className="text-center align-middle fw-normal text-danger p-1 m-0"
-                    colSpan="7"
-                  >
-                    Something went wrong :(
-                  </td>
-                </tr>
-              )}
-              {loading && (
-                <tr>
-                  <td colSpan="7">
-                    <div className="d-flex align-items-center justify-content-center">
-                      <div className="d-flex align-items-center jusitfy-content-center">
-                        <div className="sk-wave sk-primary">
-                          <div className="sk-wave-rect"></div>
-                          <div className="sk-wave-rect"></div>
-                          <div className="sk-wave-rect"></div>
-                          <div className="sk-wave-rect"></div>
-                          <div className="sk-wave-rect"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
           <Pagination />
