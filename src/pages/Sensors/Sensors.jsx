@@ -4,6 +4,7 @@ import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
 import { useState, useEffect } from "react";
 import echo from "@/services/sockets";
+import toast from "react-hot-toast";
 
 const Borrowers = () => {
   const [params, setParams] = useState({
@@ -23,6 +24,7 @@ const Borrowers = () => {
 
     channel.listen(".sensor.stored", (event) => {
       console.log("New data has been stored:", event.sensorData);
+
       setParams((prev) => ({
         ...prev,
         randomizer: Date.now(),

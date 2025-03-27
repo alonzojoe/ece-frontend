@@ -4,19 +4,23 @@ import Sensors from "@/pages/Sensors/Sensors";
 import ProtectedRoutes from "@/middleware/ProtectedRoutes";
 import Auth from "@/pages/Auth/Auth";
 import Borrowers from "./pages/Borrowers/Borrowers";
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="" element={<Auth />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route path="home" element={<RootLayout />}>
-            <Route index element={<Sensors />} />
-            <Route path="borrowers" element={<Borrowers />} />
+    <>
+      <Toaster />
+      <BrowserRouter>
+        <Routes>
+          <Route path="" element={<Auth />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="home" element={<RootLayout />}>
+              <Route index element={<Sensors />} />
+              <Route path="borrowers" element={<Borrowers />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
