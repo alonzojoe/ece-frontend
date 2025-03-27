@@ -83,29 +83,8 @@ export class Notification {
   }
 
   custom(message, position = "top-right") {
-    toast.custom(
-      <div
-        className="d-flex gap-2"
-        style={{
-          border: "1px solid #1AA14D",
-          background: "#E8F5E9",
-          color: "#1AA14D",
-          padding: "10px 150px 10px 10px",
-          borderRadius: "5px",
-        }}
-      >
-        <div>
-          <i className="ti ti-alert-triangle" />
-        </div>
-        <div>
-          <div className="fw-semibold">Message</div>
-          <span style={{ color: "#475365" }}>{message}</span>
-        </div>
-      </div>,
-      {
-        duration: 100000, // 5 seconds duration
-        position,
-      }
-    );
+    this.normal(message);
+    this.warning(message);
+    this.critical(message);
   }
 }

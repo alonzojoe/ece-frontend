@@ -88,6 +88,22 @@ const Notifications = () => {
 export default Notifications;
 
 const NotifItem = ({ notif }) => {
+  const stateMapping = {
+    normal: { label: "bg-label-success", icon: "ti ti-check", title: "Alert" },
+    warning: {
+      label: "bg-label-warning",
+      icon: "ti ti-alert-triangle",
+      title: "Warning",
+    },
+    critical: {
+      label: "bg-label-danger",
+      icon: "ti ti-exclamation-circle",
+      title: "Critical",
+    },
+  };
+
+  const { label, icon, title } = stateMapping[notif.state] || {};
+
   return (
     <li
       className="list-group-item list-group-item-action dropdown-notifications-item"
@@ -96,20 +112,13 @@ const NotifItem = ({ notif }) => {
       <div className="d-flex">
         <div className="flex-shrink-0 me-3">
           <div className="avatar">
-            <span className="avatar-initial rounded-circle bg-label-danger">
-              CF
+            <span className={`avatar-initial rounded-circle ${label}`}>
+              <i className={icon} />
             </span>
           </div>
         </div>
         <div className="flex-grow-1">
-          <h6 className="mb-1">
-            {notif.state === "normal"
-              ? "Alert"
-              : notif.state === "warning"
-              ? "Warning"
-              : "Critical"}{" "}
-            Message
-          </h6>
+          <h6 className="mb-1">{title} Message</h6>
           <p className="mb-0">Notification Content</p>
         </div>
         <div className="flex-shrink-0 dropdown-notifications-actions">
