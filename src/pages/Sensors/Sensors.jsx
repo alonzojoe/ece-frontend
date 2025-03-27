@@ -4,7 +4,9 @@ import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
 import { useState, useEffect } from "react";
 import echo from "@/services/sockets";
-import toast from "react-hot-toast";
+import { Notification } from "@/libs/utils.jsx";
+
+const notif = new Notification();
 
 const Borrowers = () => {
   const [params, setParams] = useState({
@@ -24,7 +26,9 @@ const Borrowers = () => {
 
     channel.listen(".sensor.stored", (event) => {
       console.log("New data has been stored:", event.sensorData);
-
+      notif.normal(`New data has been store: ${event.sensorData.load}`);
+      notif.warning(`New data has been store: ${event.sensorData.load}`);
+      notif.critical(`New data has been store: ${event.sensorData.load}`);
       setParams((prev) => ({
         ...prev,
         randomizer: Date.now(),
@@ -619,7 +623,14 @@ const Borrowers = () => {
                 }}
               >
                 <button className="btn btn-primary">Search</button>
-                <button className="btn btn-danger">Refresh</button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    notif.custom(`data has been inserted`);
+                  }}
+                >
+                  Refresh
+                </button>
               </div>
             </div>
           </div>

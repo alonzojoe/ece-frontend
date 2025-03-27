@@ -325,6 +325,11 @@ table>thead>tr>th {
   text-transform: capitalize !important;
 }
 
+.notif-container {
+  overflow-y: auto;
+  height: 700px !important;
+}
+
 @media screen and (max-width: 768px) {
   .nav-menu-x {
     visibility: visible !important;
