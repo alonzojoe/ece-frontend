@@ -311,6 +311,7 @@ button:disabled {
 }
 
 .nav-menu-x {
+  z-index: 99999;
   bottom: 5px !important;
 }
 
