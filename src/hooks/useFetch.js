@@ -15,7 +15,7 @@ const useFetch = (endpoint, params = {}) => {
         const res = await api.get(endpoint, { params });
         setData(await res.data);
       } catch (error) {
-        setError(error.messsage);
+        setError(error?.message);
       } finally {
         setLoading(false);
       }
