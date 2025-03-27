@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import { MENUS } from "../../constants"
-
+import { MENUS } from "../../constants";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = ({ toggleSidebar, isToggled }) => {
-  const selectedId = 1;
+  const { pathname } = useLocation();
+
+  console.log("useLoc", pathname);
 
   return (
     <aside
@@ -20,7 +22,7 @@ const Sidebar = ({ toggleSidebar, isToggled }) => {
         <div>
           <span className="app-brand-logo demo">
             {/* <img
-              src="../../assets/logos/camarin-logo-white.png"
+              src="#"
               className="img-fluid"
               height="60"
               width="60"
@@ -28,7 +30,7 @@ const Sidebar = ({ toggleSidebar, isToggled }) => {
             /> */}
           </span>
           <span className="app-brand-text demo menu-text fw-bold mx-auto">
-            Logo - LMS
+            App - Name
           </span>
         </div>
         <a
@@ -63,8 +65,13 @@ const Sidebar = ({ toggleSidebar, isToggled }) => {
           <span className="menu-header-text">Home</span>
         </li>
         {MENUS.map((menu) => (
-          <li className={`menu-item ${menu.id === selectedId ? 'active': ''}`} key={menu.id}>
-            <Link to={`/home/${menu.path}`} className="menu-link">
+          <li
+            className={`menu-item ${
+              pathname === `/home${menu.path}` ? "active" : ""
+            }`}
+            key={menu.id}
+          >
+            <Link to={`/home${menu.path}`} className="menu-link">
               <i className={`menu-icon tf-icons ${menu.icon}`}></i>
               <div>{menu.name}</div>
             </Link>

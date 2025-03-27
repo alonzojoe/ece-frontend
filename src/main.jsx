@@ -13,7 +13,7 @@ import "@/assets/vendor/css/rtl/theme-default.css";
 import "@/assets/vendor/css/demo.css";
 import "@/assets/vendor/fonts/flag-icons.css";
 import "@/assets/vendor/css/rtl/theme-semi-dark.css";
-
+import "@/assets/css/email.css";
 //pages
 import "@/assets/vendor/css/pages/cards-advance.css";
 import "@/assets/vendor/css/rtl/custom-style.css";

@@ -47,7 +47,9 @@ const RootLayout = () => {
                 <Outlet />
               </div>
               {/* Footer 
+              
          Footer */}
+              <Footer />
               <div className="content-backdrop fade"></div>
             </div>
             {/* Content wrapper */}
@@ -75,7 +77,6 @@ const RootLayout = () => {
         ></div>
         <div className="drag-target"></div>
       </div>
-      <Footer />
     </>
   );
 };

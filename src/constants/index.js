@@ -2,7 +2,7 @@ export const MENUS = [
   {
     id: 1,
     name: "Sensor Data",
-    path: "/sensors",
+    path: "/",
     icon: "ti ti-table-filled",
   },
   {
@@ -14,7 +14,7 @@ export const MENUS = [
   {
     id: 3,
     name: "User Management",
-    path: "/notify",
+    path: "/users",
     icon: "ti ti-user-filled",
   },
   {
