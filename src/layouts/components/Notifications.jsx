@@ -1,7 +1,7 @@
 import useToggle from "@/hooks/useToggle";
 import useFetch from "@/hooks/useFetch";
 import api from "@/services/api";
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import echo from "@/services/sockets";
 
 const Notifications = () => {
@@ -52,6 +52,15 @@ const Notifications = () => {
       ...prevParams,
       showAll: !prevParams.showAll,
     }));
+  };
+
+  const clearNotif = async () => {
+    try {
+      await api.delete();
+      setParams((prev) => ({ ...prev, random: Date.now() }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const unseen =
@@ -134,25 +143,24 @@ const Notifications = () => {
                 ))}
             </ul>
           </li>
-          {/* {!params.showAll && (
-            <li className="dropdown-menu-footer border-top">
-              <span
-                className="dropdown-item cursor-pointer d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
-                onClick={() => showAll()}
-              >
-                View all notifications
-              </span>
-            </li>
-          )} */}
+
+          {/* <li className="dropdown-menu-footer border-top">
+            <span
+              className="dropdown-item text-danger cursor-pointer d-flex justify-content-center p-2 h-px-40 mb-1 align-items-center"
+              onClick={() => showAll()}
+            >
+              Clear notifications
+            </span>
+          </li> */}
         </ul>
       )}
     </li>
   );
 };
 
-export default Notifications;
+export default React.memo(Notifications);
 
-const NotifItem = ({ notif }) => {
+const NotifItem = React.memo(({ notif }) => {
   const stateMapping = {
     normal: { label: "bg-label-success", icon: "ti ti-check", title: "Alert" },
     warning: {
@@ -209,4 +217,4 @@ const NotifItem = ({ notif }) => {
       </div>
     </li>
   );
-};
+});

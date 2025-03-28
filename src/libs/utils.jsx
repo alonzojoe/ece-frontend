@@ -11,7 +11,7 @@ export class Notification {
           color: "#1AA14D",
           padding: "10px 10px 10px 10px",
           borderRadius: "5px",
-        }}
+    }}
       >
         <div>
           <i className="ti ti-check" />

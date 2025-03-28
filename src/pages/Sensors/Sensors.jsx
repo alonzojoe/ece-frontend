@@ -5,6 +5,7 @@ import useFetch from "@/hooks/useFetch";
 import { useState, useEffect } from "react";
 import echo from "@/services/sockets";
 import { Notification } from "@/libs/utils.jsx";
+import Badge from "@/components/UI/Badge";
 
 const notif = new Notification();
 
@@ -670,28 +671,25 @@ const Borrowers = () => {
           <table className="table table-bordered table-hover">
             <thead>
               <tr style={{ textTransform: "capitalize !important" }}>
-                <th
-                  className="text-center bg-primary timport Action from './../../../node_modules/pusher-js/types/src/core/connection/protocol/action.d';
-ext-white fw-bold p-2 m-0"
-                >
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   ID
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   Building Name
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   Load
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   Deflection
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   Angle of Deflection
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   Status
                 </th>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
                   Options
                 </th>
               </tr>
@@ -758,7 +756,7 @@ ext-white fw-bold p-2 m-0"
                       {s.angle_of_deflection}
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
-                      <span className="badge-green me-1">Normal</span>
+                      <Badge state={s.notification.state} />
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       <div className="d-flex align-items-center justify-content-center gap-2">
