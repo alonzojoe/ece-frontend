@@ -11,7 +11,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <div className="w-100">
       <div
-        className="m-0 p-3 d-flex justify-content-between align-items-center"
+        className="pagination-container m-0 p-3 d-flex justify-content-between align-items-center"
         id="card-body"
       >
         <div>Total Pages: {totalPages}</div>

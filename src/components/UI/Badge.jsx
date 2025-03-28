@@ -16,7 +16,9 @@ const Badge = ({ state }) => {
   const { classN, icon, title } = stateMapping[state] || {};
 
   return (
-    <div className={`d-flex align-items-center gap-2 ${classN}`}>
+    <div
+      className={`d-flex justify-content-center align-items-center gap-1 ${classN}`}
+    >
       <div className="fs">
         <i className={icon} />
       </div>

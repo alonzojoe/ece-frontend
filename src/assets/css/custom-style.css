@@ -356,9 +356,16 @@ table>thead>tr>th {
   border-radius: 5px
 }
 
+
+
 @media screen and (max-width: 768px) {
   .nav-menu-x {
     visibility: visible !important;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 15px;
   }
 
 }
