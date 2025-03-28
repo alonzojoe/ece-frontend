@@ -74,6 +74,13 @@ const Borrowers = () => {
 
   console.log("data", sensors, error);
 
+  const handlePageChange = (page) => {
+    setParams((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
+
   return (
     <>
       {1 + 3 == 2 && (
@@ -756,7 +763,7 @@ const Borrowers = () => {
                       {s.angle_of_deflection}
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
-                      <Badge state={s.notification.state} />
+                      {s.notification && <Badge state={s.notification.state} />}
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       <div className="d-flex align-items-center justify-content-center gap-2">
@@ -772,7 +779,13 @@ const Borrowers = () => {
                 ))}
             </tbody>
           </table>
-          <Pagination />
+          {!loading && sensors?.data?.length > 0 && (
+            <Pagination
+              currentPage={params.page}
+              totalPages={sensors.total_pages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </>
