@@ -1,38 +1,70 @@
 import useToggle from "@/hooks/useToggle";
-
-const NOTIFICATIONS = [
-  {
-    id: 1,
-    sensor_data_id: 35,
-    state: "normal",
-    status: 1,
-  },
-  {
-    id: 2,
-    sensor_data_id: 34,
-    state: "warning",
-    status: 0,
-  },
-  {
-    id: 3,
-    sensor_data_id: 34,
-    state: "critical",
-    status: 0,
-  },
-];
+import useFetch from "@/hooks/useFetch";
+import api from "@/services/api";
+import { useState, useMemo, useEffect } from "react";
+import echo from "@/services/sockets";
 
 const Notifications = () => {
   const [showNotif, toggleShowNotif] = useToggle(false);
 
-  const toggleNotif = () => {
+  const [params, setParams] = useState({
+    showAll: false,
+    random: 0,
+    page: 1,
+  });
+
+  const {
+    data: notifications,
+    loading,
+    error,
+  } = useFetch("/notif/all", params);
+
+  useEffect(() => {
+    const channel = echo.channel("sensor-data");
+
+    channel.listen(".sensor.stored", (event) => {
+      console.log("notif", event.sensorData);
+
+      setParams((prev) => ({
+        ...prev,
+        random: Date.now(),
+      }));
+    });
+
+    return () => {
+      channel.stopListening(".sensor.stored");
+      echo.leaveChannel("sensor-data");
+    };
+  }, []);
+
+  const toggleNotif = async () => {
+    try {
+      const res = await api.patch(`/notif/seen`);
+      setParams((prev) => ({ ...prev, random: Date.now() }));
+    } catch (error) {
+      console.log(error);
+    }
     toggleShowNotif();
   };
+
+  const showAll = () => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      showAll: !prevParams.showAll,
+    }));
+  };
+
+  const unseen =
+    useMemo(() => {
+      return notifications?.data?.filter(
+        (notification) => notification.status === 1
+      ).length;
+    }, [notifications?.data]) ?? 0;
 
   return (
     <li className="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
       <span
         className="nav-link dropdown-toggle hide-arrow show"
-        href="javascript:void(0);"
         data-bs-toggle="dropdown"
         data-bs-auto-close="outside"
         aria-expanded="true"
@@ -41,7 +73,7 @@ const Notifications = () => {
       >
         <i className="ti ti-bell-filled ti-md"></i>
         <span className="badge bg-danger rounded-pill badge-notifications">
-          {NOTIFICATIONS.length}
+          {unseen}
         </span>
       </span>
       {showNotif && (
@@ -53,7 +85,6 @@ const Notifications = () => {
             <div className="dropdown-header d-flex align-items-center py-3">
               <h5 className="text-body mb-0 me-auto">Notification</h5>
               <span
-                href="javascript:void(0)"
                 className="dropdown-notifications-all text-body"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
@@ -66,19 +97,53 @@ const Notifications = () => {
           </li>
           <li className="notif-container dropdown-notifications-list scrollable-container ps">
             <ul className="list-group list-group-flush">
-              {NOTIFICATIONS.map((notif) => (
-                <NotifItem notif={notif} key={notif.id} />
-              ))}
+              {loading && (
+                <li>
+                  <div className="d-flex align-items-center justify-content-center mt-5">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                </li>
+              )}
+              {error && (
+                <li>
+                  <div className="d-flex align-items-center justify-content-center mt-5">
+                    <div className="">
+                      <span className="text-danger">Something went wrong.</span>
+                    </div>
+                  </div>
+                </li>
+              )}
+              {!loading && !error && !notifications?.data.length && (
+                <li>
+                  <div className="d-flex align-items-center justify-content-center mt-5">
+                    <div className="">
+                      <span className="text-dark">
+                        No notifications available.
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              )}
+              {!loading &&
+                !error &&
+                notifications?.data?.length > 0 &&
+                notifications.data.map((notif) => (
+                  <NotifItem notif={notif} key={notif.id} />
+                ))}
             </ul>
           </li>
-          <li className="dropdown-menu-footer border-top">
-            <a
-              href="javascript:void(0);"
-              className="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
-            >
-              View all notifications
-            </a>
-          </li>
+          {/* {!params.showAll && (
+            <li className="dropdown-menu-footer border-top">
+              <span
+                className="dropdown-item cursor-pointer d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
+                onClick={() => showAll()}
+              >
+                View all notifications
+              </span>
+            </li>
+          )} */}
         </ul>
       )}
     </li>
@@ -119,18 +184,27 @@ const NotifItem = ({ notif }) => {
         </div>
         <div className="flex-grow-1">
           <h6 className="mb-1">{title} Message</h6>
-          <p className="mb-0">Notification Content</p>
+          {notif?.sensor_data && (
+            <div className="mb-0 d-flex gap-1 flex-wrap">
+              <small className="fw-semibold">
+                Load: {notif.sensor_data.load}
+              </small>
+              <small className="fw-semibold">
+                Deflection: {notif.sensor_data.deflection}
+              </small>
+              <small className="fw-semibold">
+                Angle of Deflection: {notif.sensor_data.angle_of_deflection}
+              </small>
+            </div>
+          )}
         </div>
         <div className="flex-shrink-0 dropdown-notifications-actions">
-          <a href="javascript:void(0)" className="dropdown-notifications-read">
+          <span className="dropdown-notifications-read">
             {notif.status === 1 && <span className="badge badge-dot"></span>}
-          </a>
-          <a
-            href="javascript:void(0)"
-            className="dropdown-notifications-archive"
-          >
+          </span>
+          <span className="dropdown-notifications-archive cursor-pointer">
             <span className="ti ti-x"></span>
-          </a>
+          </span>
         </div>
       </div>
     </li>
