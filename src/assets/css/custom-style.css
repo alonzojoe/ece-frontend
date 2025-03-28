@@ -330,9 +330,42 @@ table>thead>tr>th {
   height: 700px !important;
 }
 
+.badge-normal {
+  border: 1px solid #1AA14D;
+  background: #E4F0E9;
+  color: #1AA14D;
+  padding: 5px;
+  border-radius: 5px
+}
+
+
+.badge-warning {
+  border: 1px solid #CF941A;
+  background: #FEFCE9;
+  color: #CF941A;
+  padding: 5px;
+  ;
+  border-radius: 5px
+}
+
+.badge-critical {
+  border: 1px solid #DD2F2F;
+  background: #FEF3F3;
+  color: #DD2F2F;
+  padding: 5px;
+  border-radius: 5px
+}
+
+
+
 @media screen and (max-width: 768px) {
   .nav-menu-x {
     visibility: visible !important;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 15px;
   }
 
 }

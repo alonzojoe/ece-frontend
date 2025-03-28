@@ -9,9 +9,9 @@ export class Notification {
           border: "1px solid #1AA14D",
           background: "#E4F0E9",
           color: "#1AA14D",
-          padding: "10px 150px 10px 10px",
+          padding: "10px 10px 10px 10px",
           borderRadius: "5px",
-        }}
+    }}
       >
         <div>
           <i className="ti ti-check" />
@@ -36,7 +36,7 @@ export class Notification {
           border: "1px solid #CF941A",
           background: "#FEFCE9",
           color: "#CF941A",
-          padding: "10px 150px 10px 10px",
+          padding: "10px 10px 10px 10px",
           borderRadius: "5px",
         }}
       >
@@ -63,7 +63,7 @@ export class Notification {
           border: "1px solid #DD2F2F",
           background: "#FEF3F3",
           color: "#DD2F2F",
-          padding: "10px 150px 10px 10px",
+          padding: "10px 10px 10px 10px",
           borderRadius: "5px",
         }}
       >
