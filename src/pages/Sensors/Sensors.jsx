@@ -8,6 +8,34 @@ import { Notification } from "@/libs/utils.jsx";
 
 const notif = new Notification();
 
+const output = (state, payload) => {
+  if (!state) return;
+
+  switch (state) {
+    case "normal":
+      notif.normal(
+        `Readings: Load: ${payload.load} | Deflection: ${payload.deflection} | Angle of Deflection: ${payload.angle_of_deflection}`
+      );
+      break;
+
+    case "warning":
+      notif.warning(
+        `Readings: Load: ${payload.load} | Deflection: ${payload.deflection} | Angle of Deflection: ${payload.angle_of_deflection}`
+      );
+      break;
+
+    case "critical":
+      notif.critical(
+        `Readings: Load: ${payload.load} | Deflection: ${payload.deflection} | Angle of Deflection: ${payload.angle_of_deflection}`
+      );
+      break;
+
+    default:
+      console.error("Unknown state");
+      break;
+  }
+};
+
 const Borrowers = () => {
   const [params, setParams] = useState({
     page: 1,
@@ -26,9 +54,11 @@ const Borrowers = () => {
 
     channel.listen(".sensor.stored", (event) => {
       console.log("New data has been stored:", event.sensorData);
-      notif.normal(`New data has been store: ${event.sensorData.load}`);
-      notif.warning(`New data has been store: ${event.sensorData.load}`);
-      notif.critical(`New data has been store: ${event.sensorData.load}`);
+      output(event.sensorData.state, event.sensorData);
+      // notif.normal(`New data has been store: ${event.sensorData.load}`);
+      // notif.warning(`New data has been store: ${event.sensorData.load}`);
+      // notif.critical(`New data has been store: ${event.sensorData.load}`);
+
       setParams((prev) => ({
         ...prev,
         randomizer: Date.now(),
@@ -640,7 +670,10 @@ const Borrowers = () => {
           <table className="table table-bordered table-hover">
             <thead>
               <tr style={{ textTransform: "capitalize !important" }}>
-                <th className="text-center bg-primary text-white fw-bold p-2 m-0">
+                <th
+                  className="text-center bg-primary timport Action from './../../../node_modules/pusher-js/types/src/core/connection/protocol/action.d';
+ext-white fw-bold p-2 m-0"
+                >
                   ID
                 </th>
                 <th className="text-center bg-primary text-white fw-bold p-2 m-0">
