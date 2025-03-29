@@ -83,8 +83,8 @@ const Sensors = () => {
 
   return (
     <>
-      {1 + 1 == 2 && (
-        <Modal details={{ title: "Account Ledger" }}>
+      {1 + 2 == 2 && (
+        <Modal details={{ title: "Sensor Data" }}>
           <div className="p-2">
             <div className="row my-2 ">
               <div className="col-sm-12 col-md-12 col-lg-12 mb-2">
