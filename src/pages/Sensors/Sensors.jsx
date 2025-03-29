@@ -37,7 +37,7 @@ const output = (state, payload) => {
   }
 };
 
-const Borrowers = () => {
+const Sensors = () => {
   const [params, setParams] = useState({
     page: 1,
     building_name: "",
@@ -83,14 +83,14 @@ const Borrowers = () => {
 
   return (
     <>
-      {1 + 3 == 2 && (
+      {1 + 1 == 2 && (
         <Modal details={{ title: "Account Ledger" }}>
           <div className="p-2">
             <div className="row my-2 ">
-              <div className="col-sm-12 col-md-6 col-lg-4">
+              <div className="col-sm-12 col-md-12 col-lg-12 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Client Name
+                    Building Name
                   </label>
                   <input
                     type="text"
@@ -99,147 +99,76 @@ const Borrowers = () => {
                   />
                 </div>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
+              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Account No.
+                    Load
                   </label>
                   <input
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="01-012724"
+                    value="1000"
+                    disabled={true}
                   />
                 </div>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
+              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    STATUS
+                    Deflection
                   </label>
                   <input
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="UPDATED"
+                    value="500"
+                    disabled={true}
                   />
                 </div>
               </div>
-            </div>
-            <div className="row mt-2">
-              <div className="col-sm-12 col-md-6 col-lg-4">
+              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Loan Amount
+                    Angle of Deflection
                   </label>
                   <input
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="182,715.00"
+                    value="0.55"
+                    disabled={true}
                   />
                 </div>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Mode of Payment
+                    Status
                   </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value="DAILY"
-                  />
+                  <Badge state="critical" />
                 </div>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4">
                 <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Amortization
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value="1,439.00"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row mt-2">
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Date Released
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control form-control-sm custom-font"
-                    value="2023-06-27"
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Maturity Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control form-control-sm custom-font"
-                    value="2023-11-27"
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Term
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value="5"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row mt-2">
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    SCB (Security/Collateral/Balance)
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value="90,619.00"
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Outstanding Balance
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font text-danger"
-                    value="162,715.00"
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Arrears
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font text-danger"
-                    value="-17,904.00"
-                  />
+                  <div
+                    className="d-flex gap-2 align-items-center"
+                    style={{
+                      marginTop: "1.7rem",
+                    }}
+                  >
+                    <button className="btn btn-primary">Update</button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => {
+                        notif.custom(`data has been inserted`);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="table-responsive mt-3">
+          {/* <div className="table-responsive mt-3">
             <table className="table table-bordered table-hover">
               <thead>
                 <tr>
@@ -592,7 +521,7 @@ const Borrowers = () => {
                 </tr>
               </tbody>
             </table>
-          </div>
+          </div> */}
         </Modal>
       )}
       <div className="card mt-3">
@@ -792,4 +721,4 @@ const Borrowers = () => {
   );
 };
 
-export default Borrowers;
+export default Sensors;
