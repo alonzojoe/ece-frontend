@@ -5,6 +5,7 @@ import ProtectedRoutes from "@/middleware/ProtectedRoutes";
 import Auth from "@/pages/Auth/Auth";
 import Borrowers from "./pages/Borrowers/Borrowers";
 import Emails from "@/pages/Emails/Emails";
+import Settings from "@/pages/Settings/Settings";
 import { Toaster } from "react-hot-toast";
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="home" element={<RootLayout />}>
               <Route index element={<Sensors />} />
               <Route path="notify" element={<Emails />} />
+              <Route path="settings" element={<Settings />} />
               <Route path="borrowers" element={<Borrowers />} />
             </Route>
           </Route>
