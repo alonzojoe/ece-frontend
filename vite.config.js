@@ -8,4 +8,7 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  optimizeDeps: {
+    exclude: ["sweetalert2"],
+  },
 });

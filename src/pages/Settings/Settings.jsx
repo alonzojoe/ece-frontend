@@ -1,5 +1,6 @@
 import List from "./components/List";
 import Swal from "sweetalert2";
+
 const POSITIONS = [
   {
     id: 1,
@@ -31,13 +32,13 @@ const POSITIONS = [
 const Settings = () => {
   const addNew = () => {
     Swal.fire({
-      title: "Submit your Github username",
+      title: "Position Name",
       input: "text",
       inputAttributes: {
         autocapitalize: "off",
       },
       showCancelButton: true,
-      confirmButtonText: "Look up",
+      confirmButtonText: "Save",
       showLoaderOnConfirm: true,
       preConfirm: async (login) => {
         try {
