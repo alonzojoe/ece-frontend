@@ -2,10 +2,13 @@ import Modal from "@/components/UI/Modal";
 import Card from "@/components/UI/Card";
 import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import echo from "@/services/sockets";
 import { Notification } from "@/libs/utils.jsx";
 import Badge from "@/components/UI/Badge";
+import useToggle from "@/hooks/useToggle";
+import Swal from "sweetalert2";
+import api from "@/services/api";
 
 const notif = new Notification();
 
@@ -47,9 +50,13 @@ const Sensors = () => {
     status: 1,
     randomizer: 0,
   });
-
+  const [payload, setPayload] = useState({
+    data: null,
+    isPending: false,
+  });
+  const buildingNameRef = useRef(null);
   const { data: sensors, loading, error } = useFetch(`/sensor`, params);
-
+  const [modal, toggleModal] = useToggle(false);
   useEffect(() => {
     const channel = echo.channel("sensor-data");
 
@@ -81,10 +88,42 @@ const Sensors = () => {
     }));
   };
 
+  const update = (selected) => {
+    console.log("selected data", selected);
+    setPayload((prev) => ({ ...prev, data: selected }));
+    toggleModal(true);
+  };
+
+  const handleUpdate = async () => {
+    setPayload((prev) => ({ ...prev, isPending: true }));
+    try {
+      await api.put(`/sensor/update/${payload.data.id}`, {
+        ...payload.data,
+        building_name: buildingNameRef.current.value,
+        user_id: 1,
+      });
+      Swal.fire({
+        icon: "success",
+        title: `Information`,
+        text: "Sensor data updated successfully!",
+      }).then(() => {
+        setParams((prev) => ({ ...prev, randomizer: Date.now() }));
+      });
+      toggleModal(false);
+    } catch (error) {
+      console.log(`error`, error?.message);
+    } finally {
+      setPayload((prev) => ({ ...prev, isPending: false }));
+    }
+  };
+
   return (
     <>
-      {1 + 2 == 2 && (
-        <Modal details={{ title: "Sensor Data" }}>
+      {modal && (
+        <Modal
+          onClose={() => toggleModal(false)}
+          details={{ title: "Sensor Data" }}
+        >
           <div className="p-2">
             <div className="row my-2 ">
               <div className="col-sm-12 col-md-12 col-lg-12 mb-2">
@@ -93,9 +132,10 @@ const Sensors = () => {
                     Building Name
                   </label>
                   <input
+                    ref={buildingNameRef}
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="CAPULONG, LUCHIE"
+                    defaultValue={payload.data.building_name}
                   />
                 </div>
               </div>
@@ -107,7 +147,7 @@ const Sensors = () => {
                   <input
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="1000"
+                    value={payload.data.load}
                     disabled={true}
                   />
                 </div>
@@ -120,7 +160,7 @@ const Sensors = () => {
                   <input
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="500"
+                    value={payload.data.deflection}
                     disabled={true}
                   />
                 </div>
@@ -133,7 +173,7 @@ const Sensors = () => {
                   <input
                     type="text"
                     className="form-control form-control-sm custom-font"
-                    value="0.55"
+                    value={payload.data.angle_of_deflection}
                     disabled={true}
                   />
                 </div>
@@ -143,7 +183,7 @@ const Sensors = () => {
                   <label className="form-label fs-6 mb-2 fw-semibold">
                     Status
                   </label>
-                  <Badge state="critical" />
+                  <Badge state={payload.data.notification.state} />
                 </div>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4">
@@ -154,12 +194,27 @@ const Sensors = () => {
                       marginTop: "1.7rem",
                     }}
                   >
-                    <button className="btn btn-primary">Update</button>
+                    <button
+                      className="btn btn-primary d-flex gap-2 align-items-center"
+                      onClick={handleUpdate}
+                      disabled={payload.isPending}
+                    >
+                      <span>{payload.isPending ? "Updating" : "Update"}</span>
+                      {payload.isPending && (
+                        <div
+                          className="spinner-border text-white"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      )}
+                    </button>
                     <button
                       className="btn btn-danger"
-                      onClick={() => {
-                        notif.custom(`data has been inserted`);
-                      }}
+                      // onClick={() => {
+                      //   notif.custom(`data has been inserted`);
+                      // }}
+                      onClick={() => toggleModal(false)}
                     >
                       Cancel
                     </button>
@@ -168,360 +223,6 @@ const Sensors = () => {
               </div>
             </div>
           </div>
-          {/* <div className="table-responsive mt-3">
-            <table className="table table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    colSpan={3}
-                  ></th>
-                  <th
-                    className="text-center bg-primary text-white fw-normal p-1 m-0"
-                    colSpan={1}
-                  >
-                    Debit
-                  </th>
-                  <th
-                    className="text-center bg-danger text-white fw-normal p-1 m-0"
-                    colSpan={3}
-                  >
-                    Credit
-                  </th>
-                  <th
-                    className="text-center bg-dark text-white fw-normal p-1 m-0"
-                    colSpan={2}
-                  >
-                    Adjustment
-                  </th>
-                </tr>
-                <tr className="text-dark">
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Transaction Date
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Reference No
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Particulars
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Cash Release
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Payment
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Discount
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Penalty
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Reversal
-                  </th>
-                  <th
-                    className="text-center text-dark fw-normal p-1 m-0"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    Out. Balance
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    06/27/23
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    16512
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    LOAN RELEASE
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    182,715.00
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    182,715.00
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    07/01/23
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    605243
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    PAYMENT
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    10,000.00
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    172,715.00
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    07/08/23
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    607765
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    PAYMENT
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    10,000.00
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0"></td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    162,715.00
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    &nbsp;
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> */}
         </Modal>
       )}
       <div className="card mt-3">
@@ -696,7 +397,10 @@ const Sensors = () => {
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       <div className="d-flex align-items-center justify-content-center gap-2">
-                        <button className="btn btn-warning btn-sm">
+                        <button
+                          className="btn btn-warning btn-sm"
+                          onClick={() => update(s)}
+                        >
                           Update
                         </button>
                         <button className="btn btn-danger btn-sm">

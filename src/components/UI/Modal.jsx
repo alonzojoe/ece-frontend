@@ -1,8 +1,9 @@
-const Modal = ({ details, client, children }) => {
+const Modal = ({ details, client, children, onClose }) => {
   return (
     <div className="cst-modal2">
       <div className="cst-modal-body2 bg-white rounded position-relative">
         <span
+          onClick={onClose}
           className="position-absolute cst-close"
           style={{
             fontSize: "20px",
