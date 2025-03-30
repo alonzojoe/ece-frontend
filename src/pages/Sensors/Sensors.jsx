@@ -40,16 +40,18 @@ const output = (state, payload) => {
   }
 };
 
+const initialState = {
+  page: 1,
+  building_name: "",
+  load: "",
+  deflection: "",
+  angle_of_deflection: "",
+  status: 1,
+  randomizer: 0,
+};
+
 const Sensors = () => {
-  const [params, setParams] = useState({
-    page: 1,
-    building_name: "",
-    load: "",
-    deflection: "",
-    angle_of_deflection: "",
-    status: 1,
-    randomizer: 0,
-  });
+  const [params, setParams] = useState(initialState);
   const [payload, setPayload] = useState({
     data: null,
     isPending: false,
@@ -115,6 +117,32 @@ const Sensors = () => {
     } finally {
       setPayload((prev) => ({ ...prev, isPending: false }));
     }
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      icon: "question",
+      title: "Are you sure to delete this record?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Record has been deleted!", "", "success");
+        try {
+          await api.patch(`/sensor/inactive/${id}`);
+          setParams((prev) => ({ ...prev, randomizer: Date.now() }));
+        } catch (error) {
+          console.log("error", error?.message);
+        }
+      }
+    });
+  };
+
+  const refresh = () => {
+    setParams({
+      ...initialState,
+      randomizer: Date.now(),
+    });
   };
 
   return (
@@ -293,9 +321,10 @@ const Sensors = () => {
                 <button className="btn btn-primary">Search</button>
                 <button
                   className="btn btn-danger"
-                  onClick={() => {
-                    notif.custom(`data has been inserted`);
-                  }}
+                  // onClick={() => {
+                  //   notif.custom(`data has been inserted`);
+                  // }}
+                  onClick={refresh}
                 >
                   Refresh
                 </button>
@@ -403,7 +432,10 @@ const Sensors = () => {
                         >
                           Update
                         </button>
-                        <button className="btn btn-danger btn-sm">
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelete(s.id)}
+                        >
                           Delete
                         </button>
                       </div>
