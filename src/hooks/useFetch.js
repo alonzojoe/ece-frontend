@@ -22,7 +22,7 @@ const useFetch = (endpoint, params = {}) => {
     };
 
     fetchData();
-  }, [endpoint, params]);
+  }, [endpoint, JSON.stringify(params)]);
 
   return { data, loading, error };
 };

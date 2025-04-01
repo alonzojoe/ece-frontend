@@ -25,6 +25,12 @@ export const registrySchema = z
       .trim()
       .nonempty({ message: "Email is required" })
       .email({ message: "Please enter a valid email" }),
+    phone: z.string().trim().nonempty({ message: "Phone is required" }),
+    gender: z.string().trim().nonempty({ message: "Gender is required" }),
+    position_id: z
+      .string()
+      .nonempty({ message: "Position is required" })
+      .transform((val) => val.trim()),
     password: z
       .string()
       .trim()
@@ -40,5 +46,5 @@ export const registrySchema = z
   })
   .refine((val) => val.password === val.confirmPassword, {
     message: "Passwords must match",
-    path: ["confirmPassword"], // This specifies where the error should be attached
+    path: ["confirmPassword"],
   });

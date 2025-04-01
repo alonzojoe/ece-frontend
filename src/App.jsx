@@ -3,7 +3,6 @@ import RootLayout from "@/layouts/RootLayout";
 import Sensors from "@/pages/Sensors/Sensors";
 import ProtectedRoutes from "@/middleware/ProtectedRoutes";
 import Auth from "@/pages/Auth/Auth";
-import Borrowers from "./pages/Borrowers/Borrowers";
 import Emails from "@/pages/Emails/Emails";
 import Settings from "@/pages/Settings/Settings";
 import Users from "@/pages/Users/Users";
@@ -21,7 +20,6 @@ function App() {
               <Route path="notify" element={<Emails />} />
               <Route path="users" element={<Users />} />
               <Route path="settings" element={<Settings />} />
-              <Route path="borrowers" element={<Borrowers />} />
             </Route>
           </Route>
         </Routes>

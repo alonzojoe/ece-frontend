@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-
+import Swal from "sweetalert2";
 export class Notification {
   normal(message, position = "top-right") {
     toast.custom(
@@ -11,7 +11,7 @@ export class Notification {
           color: "#1AA14D",
           padding: "10px 10px 10px 10px",
           borderRadius: "5px",
-    }}
+        }}
       >
         <div>
           <i className="ti ti-check" />
@@ -86,5 +86,25 @@ export class Notification {
     this.normal(message);
     this.warning(message);
     this.critical(message);
+  }
+}
+
+export class ToastMessage {
+  notif(icon, title) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon,
+      title,
+    });
   }
 }

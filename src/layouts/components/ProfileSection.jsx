@@ -13,7 +13,7 @@ const ProfileSection = () => {
           <img
             src={defaultImage}
             alt="user-avatar"
-            className="h-auto rounded-circle"
+            className="h-auto rounded-circle border border-secondary"
           />
         </div>
       </a>
@@ -29,12 +29,12 @@ const ProfileSection = () => {
                   <img
                     src={defaultImage}
                     alt="user-avatar"
-                    className="h-auto rounded-circle"
+                    className="h-auto rounded-circle border border-secondary"
                   />
                 </div>
               </div>
               <div className="flex-grow-1">
-                <span className="fw-medium d-block">Joenell Alonzo</span>
+                <span className="fw-medium d-block">Administrator</span>
                 <small className="text-muted">Admin</small>
               </div>
             </div>

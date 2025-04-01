@@ -9,6 +9,7 @@ import Badge from "@/components/UI/Badge";
 import useToggle from "@/hooks/useToggle";
 import Swal from "sweetalert2";
 import api from "@/services/api";
+import SearchData from "./components/SearchData";
 
 const notif = new Notification();
 
@@ -52,6 +53,7 @@ const initialState = {
 
 const Sensors = () => {
   const [params, setParams] = useState(initialState);
+
   const [payload, setPayload] = useState({
     data: null,
     isPending: false,
@@ -143,6 +145,20 @@ const Sensors = () => {
       ...initialState,
       randomizer: Date.now(),
     });
+  };
+
+  const handleSearch = (form) => {
+    const { building_name, load, deflection, angle_of_deflection, status } =
+      form;
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      building_name: building_name,
+      load: load,
+      deflection: deflection,
+      angle_of_deflection: angle_of_deflection,
+      status: status,
+    }));
   };
 
   return (
@@ -254,116 +270,33 @@ const Sensors = () => {
         </Modal>
       )}
       <div className="card mt-3">
-        <Card title="Search">
-          <div className="row mt-4">
-            <div className="col-sm-12 col-md-6 col-lg-3">
-              <div>
-                <label className="form-label fs-6 mb-2 fw-semibold">
-                  Building Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control form-control-sm custom-font"
-                />
-              </div>
-            </div>
-            <div className="col-sm-12 col-md-6 col-lg-3">
-              <div>
-                <label className="form-label fs-6 mb-2 fw-semibold">Load</label>
-                <input
-                  type="text"
-                  className="form-control form-control-sm custom-font"
-                />
-              </div>
-            </div>
-            <div className="col-sm-12 col-md-6 col-lg-3">
-              <div>
-                <label className="form-label fs-6 mb-2 fw-semibold">
-                  Deflection
-                </label>
-                <input
-                  type="text"
-                  className="form-control form-control-sm custom-font"
-                />
-              </div>
-            </div>
-            <div className="col-sm-12 col-md-6 col-lg-3">
-              <div>
-                <label className="form-label fs-6 mb-2 fw-semibold">
-                  Angle of Deflection
-                </label>
-                <input
-                  type="text"
-                  className="form-control form-control-sm custom-font"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col-sm-12 col-md-6 col-lg-3">
-              <div>
-                <label className="form-label fs-6 mb-2 fw-semibold">
-                  Status
-                </label>
-                <select className="form-select form-control-sm custom-font">
-                  <option value="1">Active</option>
-                  <option value="0">Inactive</option>
-                </select>
-              </div>
-            </div>
-            <div className="col-sm-12 col-md-6 col-lg-3">
-              <div
-                className="d-flex gap-2 align-items-center"
-                style={{
-                  marginTop: "1.7rem",
-                }}
-              >
-                <button className="btn btn-primary">Search</button>
-                <button
-                  className="btn btn-danger"
-                  // onClick={() => {
-                  //   notif.custom(`data has been inserted`);
-                  // }}
-                  onClick={refresh}
-                >
-                  Refresh
-                </button>
-              </div>
-            </div>
-          </div>
-        </Card>
-
+        <SearchData onSearch={handleSearch} onRefresh={refresh} />
         <div className="table-responsive mt-3">
           <table className="table table-bordered table-hover">
-            <thead>
+            <thead className="bg-primary">
               <tr style={{ textTransform: "capitalize !important" }}>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  ID
-                </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
+                <th className="text-center text-white p-1 py-2 m-0">ID</th>
+                <th className="text-center text-white p-1 py-2 m-0">
                   Building Name
                 </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  Load
-                </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
+                <th className="text-center text-white p-1 py-2 m-0">Load</th>
+                <th className="text-center text-white p-1 py-2 m-0">
                   Deflection
                 </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
+                <th className="text-center text-white p-1 py-2 m-0">
                   Angle of Deflection
                 </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  Status
-                </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  Options
-                </th>
+                <th className="text-center text-white p-1 py-2 m-0">Status</th>
+                <th className="text-center text-white p-1 py-2 m-0">Options</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan="7">
+                  <td
+                    className="text-center align-middle fw-normal p-1 m-0"
+                    colSpan="7"
+                  >
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="d-flex align-items-center jusitfy-content-center">
                         <div className="sk-wave sk-primary">
@@ -382,7 +315,7 @@ const Sensors = () => {
               {error && (
                 <tr>
                   <td
-                    className="text-center align-middle fw-normal text-danger p-1 m-0"
+                    className="text-center align-middle text-danger fw-normal p-1 m-0"
                     colSpan="7"
                   >
                     Something went wrong :(
