@@ -92,9 +92,9 @@ const Settings = () => {
 
   return (
     <div className="card mt-3">
-      <div className="mx-3">
+      <div className="mx-4">
         <div className="d-flex justify-content-between align-items-center">
-          <h4 className="mb-4">List of Positions</h4>
+          <h4 className="my-4">List of Positions</h4>
           <button className="btn btn-primary" onClick={addNew}>
             <i className="ti ti-plus"></i> Add New
           </button>

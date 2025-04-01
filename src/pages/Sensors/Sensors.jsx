@@ -272,35 +272,30 @@ const Sensors = () => {
         <SearchData onSearch={handleSearch} onRefresh={refresh} />
         <div className="table-responsive mt-3">
           <table className="table table-bordered table-hover">
-            <thead>
+            <thead className="bg-primary">
               <tr style={{ textTransform: "capitalize !important" }}>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  ID
-                </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
+                <th className="text-center text-white p-1 py-2 m-0">ID</th>
+                <th className="text-center text-white p-1 py-2 m-0">
                   Building Name
                 </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  Load
-                </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
+              <th className="text-center text-white p-1 py-2 m-0">Load</th>
+                <th className="text-center text-white p-1 py-2 m-0">
                   Deflection
                 </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
+              <th className="text-center text-white p-1 py-2 m-0">
                   Angle of Deflection
                 </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  Status
-                </th>
-                <th className="text-center text-white bg-primary fw-bold p-2 m-0">
-                  Options
-                </th>
+                <th className="text-center text-white p-1 py-2 m-0">Status</th>
+                <th className="text-center text-white p-1 py-2 m-0">Options</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan="7">
+                  <td
+                    className="text-center align-middle fw-normal p-1 m-0"
+                    colSpan="7"
+                  >
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="d-flex align-items-center jusitfy-content-center">
                         <div className="sk-wave sk-primary">
@@ -319,7 +314,7 @@ const Sensors = () => {
               {error && (
                 <tr>
                   <td
-                    className="text-center align-middle fw-normal text-danger p-1 m-0"
+                    className="text-center align-middle text-danger fw-normal p-1 m-0"
                     colSpan="7"
                   >
                     Something went wrong :(

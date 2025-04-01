@@ -1,5 +1,8 @@
 import React from "react";
 import Swal from "sweetalert2";
+
+import SearchUser from "./components/SearchUser";
+
 const users = [
   {
     id: 1,
@@ -37,17 +40,18 @@ const handleDelete = (id) => {
 const Users = () => {
   return (
     <div className="card mt-3">
+      <SearchUser />
       <div className="table-responsive mt-3">
         <table className="table table-bordered table-hover">
           <thead>
             <tr className="text-dark fw-bold bg-primary">
-              <th className="text-center text-white p-1 m-0">ID</th>
-              <th className="text-center text-white p-1 m-0">Name</th>
-              <th className="text-center text-white p-1 m-0">Email</th>
-              <th className="text-center text-white p-1 m-0">Gender</th>
-              <th className="text-center text-white p-1 m-0">Phone</th>
-              <th className="text-center text-white p-1 m-0">Position</th>
-              <th className="text-center text-white p-1 m-0">Option</th>
+              <th className="text-center text-white py-2 m-0">ID</th>
+              <th className="text-center text-white py-2 m-0">Name</th>
+              <th className="text-center text-white py-2 m-0">Email</th>
+              <th className="text-center text-white py-2 m-0">Gender</th>
+              <th className="text-center text-white py-2 m-0">Phone</th>
+              <th className="text-center text-white py-2 m-0">Position</th>
+              <th className="text-center text-white py-2 m-0">Option</th>
             </tr>
           </thead>
           <tbody>
