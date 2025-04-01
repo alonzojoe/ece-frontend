@@ -42,7 +42,7 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
             id="user-name"
           >
             <a className="nav-link hide-arrow" href="#">
-              <h5 className="mt-3 fw-bolder">Joenell Alonzo</h5>
+              <h5 className="mt-3 fw-bolder">Administrator</h5>
             </a>
           </li>
 
