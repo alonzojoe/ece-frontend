@@ -152,6 +152,7 @@ const Sensors = () => {
       form;
     setParams((prev) => ({
       ...prev,
+      page: 1,
       building_name: building_name,
       load: load,
       deflection: deflection,
@@ -278,11 +279,11 @@ const Sensors = () => {
                 <th className="text-center text-white p-1 py-2 m-0">
                   Building Name
                 </th>
-              <th className="text-center text-white p-1 py-2 m-0">Load</th>
+                <th className="text-center text-white p-1 py-2 m-0">Load</th>
                 <th className="text-center text-white p-1 py-2 m-0">
                   Deflection
                 </th>
-              <th className="text-center text-white p-1 py-2 m-0">
+                <th className="text-center text-white p-1 py-2 m-0">
                   Angle of Deflection
                 </th>
                 <th className="text-center text-white p-1 py-2 m-0">Status</th>

@@ -1,17 +1,19 @@
 import List from "./components/List";
 import Swal from "sweetalert2";
 import useFetch from "@/hooks/useFetch";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import api from "@/services/api";
+import Pagination from "@/components/UI/Pagination";
 
 const Settings = () => {
   const [params, setParams] = useState({
+    name: "",
     page: 1,
     random: 1,
   });
 
   const { data: positions, loading, error } = useFetch("/position", params);
-
+  const searchRef = useRef(null);
   const addNew = () => {
     Swal.fire({
       title: "Position Name",
@@ -29,7 +31,7 @@ const Settings = () => {
             throw new Error("Field name is required!");
           }
           const res = await api.post("/position/store", {
-            trimmed,
+            name: trimmed,
           });
         } catch (error) {
           console.log("error", error?.response?.data?.error || error.message);
@@ -42,9 +44,9 @@ const Settings = () => {
         Swal.fire({
           icon: "success",
           title: `Information`,
-          text: "Position saved successfully!",
+          text: "Position added successfully!",
         }).then(() => {
-          setParams((prev) => ({ ...prev, random: Date.now() }));
+          setParams((prev) => ({ ...prev, page: 1, random: Date.now() }));
         });
       }
     });
@@ -90,6 +92,25 @@ const Settings = () => {
     });
   };
 
+  const handlePageChange = (page) => {
+    setParams((prev) => ({ ...prev, page: page }));
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchRef.current.value.trim() === "") return;
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      name: searchRef.current.value,
+    }));
+  };
+
+  const refresh = () => {
+    searchRef.current.value = "";
+    setParams((prev) => ({ ...prev, page: 1, name: searchRef.current.value }));
+  };
+
   return (
     <div className="card mt-3">
       <div className="mx-4">
@@ -99,14 +120,49 @@ const Settings = () => {
             <i className="ti ti-plus"></i> Add New
           </button>
         </div>
-        <p className="mb-4">A role based list of positions.</p>
       </div>
+      <form className="mt-3" onSubmit={handleSearch}>
+        <div className="row mx-3">
+          <div className="col-sm-12 col-md-12 col-lg-12 mb-3">
+            <div className="d-flex align-items-center gap-3">
+              <label className="form-label fs-4 mb-2 fw-semibold flex-shrink-0">
+                Search
+              </label>
+              <input
+                ref={searchRef}
+                type="text"
+                name="building_name"
+                className="form-control form-control-sm custom-font"
+              />
+              <div className="d-flex gap-2 flex-shrink-0">
+                <button className="btn btn-primary flex-shrink-0" type="submit">
+                  <i className="ti ti-search"></i>
+                </button>
+                <button
+                  className="btn btn-danger flex-shrink-0"
+                  type="button"
+                  onClick={refresh}
+                >
+                  <i className="ti ti-refresh"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
       <div className="row my-2 mb-5 mx-3">
         <List
           isLoading={loading}
           positions={positions}
           onUpdate={updatePosition}
         />
+        {!loading && positions?.data?.length > 0 && (
+          <Pagination
+            currentPage={params.page}
+            totalPages={positions.total_pages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </div>
   );

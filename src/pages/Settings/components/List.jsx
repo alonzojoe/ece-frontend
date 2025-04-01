@@ -21,7 +21,9 @@ const ListItem = ({ position, onUpdate }) => {
     <div className="card border border">
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <h6 className="fw-normal mb-2">Total users: {position.total}</h6>
+          <h6 className="fw-normal mb-2">
+            Total users: {position.users_count}
+          </h6>
         </div>
         <div className="d-flex justify-content-between align-items-end mt-1">
           <div className="role-heading">
