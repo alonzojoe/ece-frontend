@@ -4,9 +4,10 @@ import "@/assets/vendor/css/pages/page-auth.css";
 import useToggle from "@/hooks/useToggle";
 import Login from "@/pages/Auth/components/Login";
 import Register from "@/pages/Auth/components/Register";
+import useFetch from "@/hooks/useFetch";
 const Auth = () => {
   const [tab, toggleTab] = useToggle(false);
-
+  const { data: positions } = useFetch("/position/all", {});
   return (
     <div className="authentication-wrapper authentication-cover authentication-bg">
       <div className="authentication-inner row">
@@ -100,7 +101,7 @@ const Auth = () => {
                 {!tab ? (
                   <Login onToggle={toggleTab} />
                 ) : (
-                  <Register onToggle={toggleTab} />
+                  <Register onToggle={toggleTab} positions={positions} />
                 )}
               </div>
             </div>

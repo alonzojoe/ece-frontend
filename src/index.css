@@ -1,7 +1,7 @@
 .card-legend {
   position: absolute;
   top: -18px;
-  left: 15px;
+  left: 26px;
 }
 
 .cst-modal2 {
@@ -84,8 +84,7 @@
 }
 
 @keyframes zoom {
-  0% {
-  }
+  0% {}
 
   100% {
     transform: scale(1.3);
