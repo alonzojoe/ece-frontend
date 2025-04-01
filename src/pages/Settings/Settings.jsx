@@ -4,6 +4,9 @@ import useFetch from "@/hooks/useFetch";
 import { useState, useRef } from "react";
 import api from "@/services/api";
 import Pagination from "@/components/UI/Pagination";
+import { ToastMessage } from "@/libs/utils";
+
+const toast = new ToastMessage();
 
 const Settings = () => {
   const [params, setParams] = useState({
@@ -41,13 +44,8 @@ const Settings = () => {
       allowOutsideClick: () => !Swal.isLoading(),
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: `Information`,
-          text: "Position added successfully!",
-        }).then(() => {
-          setParams((prev) => ({ ...prev, page: 1, random: Date.now() }));
-        });
+        toast.notif("success", "Position added successfully!");
+        setParams((prev) => ({ ...prev, page: 1, random: Date.now() }));
       }
     });
   };
@@ -81,13 +79,8 @@ const Settings = () => {
       allowOutsideClick: () => !Swal.isLoading(),
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: `Information`,
-          text: "Position updated successfully!",
-        }).then(() => {
-          setParams((prev) => ({ ...prev, random: Date.now() })); // Refresh or trigger state update
-        });
+        toast.notif("success", "Position updated successfully!");
+        setParams((prev) => ({ ...prev, random: Date.now() }));
       }
     });
   };
@@ -110,12 +103,8 @@ const Settings = () => {
       allowOutsideClick: () => !Swal.isLoading(),
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: "Position deleted successfully!",
-        }).then(() => {
-          setParams((prev) => ({ ...prev, random: Date.now() }));
-        });
+        toast.notif("success", "Position deleted successfully!");
+        setParams((prev) => ({ ...prev, random: Date.now() }));
       }
     });
   };
