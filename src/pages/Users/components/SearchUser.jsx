@@ -1,18 +1,19 @@
 import { useState } from "react";
 import Card from "@/components/UI/Card";
+import useFetch from "@/hooks/useFetch";
 
 const initialForm = {
   name: "",
   email: "",
   gender: "",
   phone: "",
-  position: 1,
+  position_id: "",
   status: 1,
 };
 
 const SearchUser = ({ onSearch, onRefresh }) => {
   const [form, setForm] = useState(initialForm);
-
+  const { data: positions } = useFetch("/position/all", {});
   const updateParams = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -31,6 +32,7 @@ const SearchUser = ({ onSearch, onRefresh }) => {
     onSearch(form);
   };
 
+  const choices = positions?.data ?? [];
   return (
     <Card title="Search">
       <form onSubmit={handleSearch}>
@@ -62,13 +64,16 @@ const SearchUser = ({ onSearch, onRefresh }) => {
           <div className="col-sm-12 col-md-6 col-lg-3">
             <div>
               <label className="form-label fs-6 mb-2 fw-semibold">Gender</label>
-              <input
-                type="text"
+              <select
                 name="gender"
-                className="form-control form-control-sm custom-font"
+                className="form-select form-control-sm custom-font"
                 value={form.gender}
                 onChange={updateParams}
-              />
+              >
+                <option value={``}>Please Select</option>
+                <option value={`Male`}>Male</option>
+                <option value={`Female`}>Female</option>
+              </select>
             </div>
           </div>
           <div className="col-sm-12 col-md-6 col-lg-3">
@@ -91,13 +96,17 @@ const SearchUser = ({ onSearch, onRefresh }) => {
                 Position
               </label>
               <select
-                name="status"
+                name="position_id"
                 className="form-select form-control-sm custom-font"
-                value={form.status}
+                value={form.position_id}
                 onChange={updateParams}
               >
-                <option value="1">Admin</option>
-                <option value="0">User</option>
+                <option value={``}>Please Select</option>
+                {choices.map((c) => (
+                  <option value={c.id} key={c.id}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -108,13 +117,16 @@ const SearchUser = ({ onSearch, onRefresh }) => {
                 marginTop: "1.7rem",
               }}
             >
-              <button className="btn btn-primary">Search</button>
+              <button className="btn btn-primary" type="submit">
+                Search
+              </button>
               <button
                 className="btn btn-danger"
                 // onClick={() => {
                 //   notif.custom(`data has been inserted`);
                 // }}
                 onClick={handleRefresh}
+                type="button"
               >
                 Refresh
               </button>
