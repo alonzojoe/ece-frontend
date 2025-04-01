@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import api from "@/services/api";
 import Pagination from "@/components/UI/Pagination";
 import { ToastMessage } from "@/libs/utils";
+import SearchList from "./components/SearchList";
 
 const toast = new ToastMessage();
 
@@ -16,7 +17,6 @@ const Settings = () => {
   });
 
   const { data: positions, loading, error } = useFetch("/position", params);
-  const searchRef = useRef(null);
   const addNew = () => {
     Swal.fire({
       title: "Position Name",
@@ -113,19 +113,16 @@ const Settings = () => {
     setParams((prev) => ({ ...prev, page: page }));
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchRef.current.value.trim() === "") return;
+  const handleSearch = (value) => {
     setParams((prev) => ({
       ...prev,
       page: 1,
-      name: searchRef.current.value,
+      name: value,
     }));
   };
 
-  const refresh = () => {
-    searchRef.current.value = "";
-    setParams((prev) => ({ ...prev, page: 1, name: searchRef.current.value }));
+  const refresh = (val) => {
+    setParams((prev) => ({ ...prev, page: 1, name: val }));
   };
 
   return (
@@ -138,35 +135,7 @@ const Settings = () => {
           </button>
         </div>
       </div>
-      <form className="mt-3" onSubmit={handleSearch}>
-        <div className="row mx-3">
-          <div className="col-sm-12 col-md-12 col-lg-12 mb-3">
-            <div className="d-flex align-items-center gap-3">
-              <label className="form-label fs-4 mb-2 fw-semibold flex-shrink-0">
-                Search
-              </label>
-              <input
-                ref={searchRef}
-                type="text"
-                name="building_name"
-                className="form-control form-control-sm custom-font"
-              />
-              <div className="d-flex gap-2 flex-shrink-0">
-                <button className="btn btn-primary flex-shrink-0" type="submit">
-                  <i className="ti ti-search"></i>
-                </button>
-                <button
-                  className="btn btn-danger flex-shrink-0"
-                  type="button"
-                  onClick={refresh}
-                >
-                  <i className="ti ti-refresh"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+      <SearchList onSearch={handleSearch} onRefresh={refresh} />
       <div className="row my-2 mb-5 mx-3">
         <List
           isLoading={loading}
