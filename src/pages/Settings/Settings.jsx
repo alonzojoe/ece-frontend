@@ -92,6 +92,34 @@ const Settings = () => {
     });
   };
 
+  const handleDelete = (id) => {
+    Swal.fire({
+      icon: "question",
+      title: "Are you sure to delete this position?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        try {
+          await api.patch(`/position/delete/${id}`);
+        } catch (error) {
+          console.log("error", error?.response?.data?.error || error.message);
+          Swal.showValidationMessage(`Request failed: ${error.message}`);
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          title: "Position deleted successfully!",
+        }).then(() => {
+          setParams((prev) => ({ ...prev, random: Date.now() }));
+        });
+      }
+    });
+  };
+
   const handlePageChange = (page) => {
     setParams((prev) => ({ ...prev, page: page }));
   };
@@ -155,6 +183,7 @@ const Settings = () => {
           isLoading={loading}
           positions={positions}
           onUpdate={updatePosition}
+          onDelete={handleDelete}
         />
         {!loading && positions?.data?.length > 0 && (
           <Pagination

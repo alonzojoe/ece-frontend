@@ -1,6 +1,6 @@
 import Loader from "@/components/UI/Loader";
 
-const List = ({ positions, onUpdate, isLoading }) => {
+const List = ({ positions, onUpdate, isLoading, onDelete }) => {
   if (isLoading || !positions?.data) {
     return <Loader />;
   }
@@ -9,14 +9,14 @@ const List = ({ positions, onUpdate, isLoading }) => {
     <>
       {positions.data.map((p) => (
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4" key={p.id}>
-          <ListItem position={p} onUpdate={onUpdate} />
+          <ListItem position={p} onUpdate={onUpdate} onDelete={onDelete} />
         </div>
       ))}
     </>
   );
 };
 
-const ListItem = ({ position, onUpdate }) => {
+const ListItem = ({ position, onUpdate, onDelete }) => {
   return (
     <div className="card border border">
       <div className="card-body">
@@ -32,9 +32,14 @@ const ListItem = ({ position, onUpdate }) => {
               <span onClick={() => onUpdate(position)}>Edit Role</span>
             </div>
           </div>
-          {/* <a href="javascript:void(0);" className="text-muted">
-                    <i className="ti ti-copy ti-md"></i>
-                  </a> */}
+          {position.id !== 1 && (
+            <span
+              className="cursor-pointer text-danger"
+              onClick={() => onDelete(position.id)}
+            >
+              <i className="ti ti-trash ti-md"></i>
+            </span>
+          )}
         </div>
       </div>
     </div>
