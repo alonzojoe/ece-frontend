@@ -3,7 +3,9 @@ import Swal from "sweetalert2";
 import useFetch from "@/hooks/useFetch";
 import SearchUser from "./components/SearchUser";
 import Pagination from "@/components/UI/Pagination";
-
+import useToggle from "@/hooks/useToggle";
+import AddUser from "./components/AddUser";
+import UpdateUser from "./components/UpdateUser";
 const initialState = {
   name: "",
   email: "",
@@ -17,7 +19,10 @@ const initialState = {
 const Users = () => {
   const [params, setParams] = useState(initialState);
   const { data: users, loading, error } = useFetch(`/auth`, params);
-
+  const { data: positions } = useFetch("/position/all", {});
+  const [showForm, toggleForm] = useToggle(false);
+  const [updateForm, toggleUpdateForm] = useToggle(false);
+  const [selected, setSelected] = useState();
   const handleDelete = (id) => {
     Swal.fire({
       icon: "question",
@@ -62,10 +67,35 @@ const Users = () => {
     });
   };
 
+  const updateUser = (selected) => {
+    setSelected(selected);
+    toggleUpdateForm(true);
+  };
+
   return (
     <div className="card mt-3">
+      {showForm && (
+        <AddUser
+          positions={positions}
+          onClose={toggleForm}
+          onRefresh={refresh}
+        />
+      )}
+      {updateForm && (
+        <UpdateUser
+          positions={positions}
+          onClose={toggleUpdateForm}
+          onRefresh={refresh}
+          selectedUser={selected}
+        />
+      )}
       <SearchUser onSearch={handleSearch} onRefresh={refresh} />
-      <div className="table-responsive mt-3">
+      <div className="d-flex justify-content-end my-2">
+        <button className="btn btn-primary" onClick={() => toggleForm(true)}>
+          <i className="ti ti-plus"></i> Create New User
+        </button>
+      </div>
+      <div className="table-responsive">
         <table className="table table-bordered table-hover">
           <thead>
             <tr className="text-dark fw-bold bg-primary">
@@ -144,7 +174,12 @@ const Users = () => {
                   </td>
                   <td className="text-center align-middle fw-normal p-1 m-0">
                     <div className="d-flex justify-content-center align-items-center gap-2">
-                      <button className="btn btn-primary btn-sm">Update</button>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => updateUser(u)}
+                      >
+                        Update
+                      </button>
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => handleDelete(u.id)}
