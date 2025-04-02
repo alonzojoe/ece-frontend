@@ -2,7 +2,7 @@ export const MENUS = [
   {
     id: 1,
     name: "Sensor Data",
-    path: "/",
+    path: "",
     icon: "ti ti-table-filled",
   },
   {

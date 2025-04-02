@@ -3,7 +3,8 @@ import Swal from "sweetalert2";
 import useFetch from "@/hooks/useFetch";
 import SearchUser from "./components/SearchUser";
 import Pagination from "@/components/UI/Pagination";
-
+import useToggle from "@/hooks/useToggle";
+import AddUser from "./components/AddUser";
 const initialState = {
   name: "",
   email: "",
@@ -17,7 +18,8 @@ const initialState = {
 const Users = () => {
   const [params, setParams] = useState(initialState);
   const { data: users, loading, error } = useFetch(`/auth`, params);
-
+  const { data: positions } = useFetch("/position/all", {});
+  const [showForm, toggleForm] = useToggle(false);
   const handleDelete = (id) => {
     Swal.fire({
       icon: "question",
@@ -64,8 +66,20 @@ const Users = () => {
 
   return (
     <div className="card mt-3">
+      {showForm && (
+        <AddUser
+          positions={positions}
+          onClose={toggleForm}
+          onRefresh={refresh}
+        />
+      )}
       <SearchUser onSearch={handleSearch} onRefresh={refresh} />
-      <div className="table-responsive mt-3">
+      <div className="d-flex justify-content-end my-2">
+        <button className="btn btn-primary" onClick={() => toggleForm(true)}>
+          <i className="ti ti-plus"></i> Create New User
+        </button>
+      </div>
+      <div className="table-responsive">
         <table className="table table-bordered table-hover">
           <thead>
             <tr className="text-dark fw-bold bg-primary">
