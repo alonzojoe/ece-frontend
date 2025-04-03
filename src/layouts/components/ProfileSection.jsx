@@ -47,9 +47,8 @@ const ProfileSection = () => {
       )}
 
       <li className="nav-item navbar-dropdown dropdown-user dropdown">
-        <a
+        <div
           className="nav-link dropdown-toggle hide-arrow"
-          href="javascript:void(0);"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
@@ -60,7 +59,7 @@ const ProfileSection = () => {
               className="h-auto rounded-circle border border-secondary"
             />
           </div>
-        </a>
+        </div>
         <ul className="dropdown-menu dropdown-menu-end">
           <li>
             <div className="dropdown-item cursor-pointer" onClick={updateUser}>

@@ -26,7 +26,7 @@ const Users = () => {
   const [showForm, toggleForm] = useToggle(false);
   const [updateForm, toggleUpdateForm] = useToggle(false);
   const [selected, setSelected] = useState();
-  
+
   const handleDelete = (id) => {
     dialog
       .confirm("question", "Confirmation", "Are you sure to delete this user?")
