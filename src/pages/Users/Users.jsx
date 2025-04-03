@@ -6,6 +6,8 @@ import Pagination from "@/components/UI/Pagination";
 import useToggle from "@/hooks/useToggle";
 import AddUser from "./components/AddUser";
 import UpdateUser from "./components/UpdateUser";
+import { ToastMessage, ConfirmDialog } from "@/libs/utils";
+
 const initialState = {
   name: "",
   email: "",
@@ -15,7 +17,8 @@ const initialState = {
   page: 1,
   random: 0,
 };
-
+const notify = new ToastMessage();
+const dialog = new ConfirmDialog();
 const Users = () => {
   const [params, setParams] = useState(initialState);
   const { data: users, loading, error } = useFetch(`/auth`, params);
@@ -24,18 +27,13 @@ const Users = () => {
   const [updateForm, toggleUpdateForm] = useToggle(false);
   const [selected, setSelected] = useState();
   const handleDelete = (id) => {
-    Swal.fire({
-      icon: "question",
-      title: "Are you sure to delete this user?",
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire("Saved!", "", "success");
-      } else if (result.isDenied) {
-        Swal.fire("Changes are not saved", "", "info");
-      }
-    });
+    dialog
+      .confirm("question", "Confirmation", "Are you sure to delete this user?")
+      .then((result) => {
+        if (result.isConfirmed) {
+          notify.notif("success", "User deleted successfully!");
+        }
+      });
   };
 
   const handlePageChange = (page) => {

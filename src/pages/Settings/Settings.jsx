@@ -1,7 +1,7 @@
 import List from "./components/List";
 import Swal from "sweetalert2";
 import useFetch from "@/hooks/useFetch";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import api from "@/services/api";
 import Pagination from "@/components/UI/Pagination";
 import { ToastMessage } from "@/libs/utils";
