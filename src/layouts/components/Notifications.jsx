@@ -3,15 +3,20 @@ import useFetch from "@/hooks/useFetch";
 import api from "@/services/api";
 import React, { useState, useMemo, useEffect } from "react";
 import echo from "@/services/sockets";
+import { ConfirmDialog, ToastMessage } from "@/libs/utils";
 
+const initialParams = {
+  showAll: false,
+  random: 0,
+  page: 1,
+};
+
+const dialog = new ConfirmDialog();
+const notify = new ToastMessage();
 const Notifications = () => {
   const [showNotif, toggleShowNotif] = useToggle(false);
-
-  const [params, setParams] = useState({
-    showAll: false,
-    random: 0,
-    page: 1,
-  });
+  const [params, setParams] = useState(initialParams);
+  const [isPending, setIsPending] = useState(false);
 
   const {
     data: notifications,
@@ -47,20 +52,32 @@ const Notifications = () => {
     toggleShowNotif();
   };
 
-  const showAll = () => {
-    setParams((prevParams) => ({
-      ...prevParams,
-      showAll: !prevParams.showAll,
-    }));
+  const refresh = () => {
+    setParams({ ...initialParams, random: Date.now() });
   };
 
-  const clearNotif = async () => {
-    try {
-      await api.delete();
-      setParams((prev) => ({ ...prev, random: Date.now() }));
-    } catch (error) {
-      console.log(error);
-    }
+  const clearNotif = () => {
+    dialog
+      .confirm(
+        "question",
+        "Confirmation",
+        "Are you sure you want to clear all notifications?"
+      )
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          setIsPending(true);
+          try {
+            await api.patch(`/notif/clear`);
+            notify.notif("success", "Notifications cleard.");
+            refresh();
+          } catch (error) {
+            console.log(error);
+            notify.notif("error", "Something went wrong.");
+          } finally {
+            setIsPending(false);
+          }
+        }
+      });
   };
 
   const unseen =
@@ -106,15 +123,19 @@ const Notifications = () => {
           </li>
           <li className="notif-container dropdown-notifications-list scrollable-container ps">
             <ul className="list-group list-group-flush">
-              {loading && (
-                <li>
-                  <div className="d-flex align-items-center justify-content-center mt-5">
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="visually-hidden">Loading...</span>
+              {loading ||
+                (isPending && (
+                  <li>
+                    <div className="d-flex align-items-center justify-content-center mt-5">
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              )}
+                  </li>
+                ))}
               {error && (
                 <li>
                   <div className="d-flex align-items-center justify-content-center mt-5">
@@ -135,7 +156,8 @@ const Notifications = () => {
                   </div>
                 </li>
               )}
-              {!loading &&
+              {!isPending &&
+                !loading &&
                 !error &&
                 notifications?.data?.length > 0 &&
                 notifications.data.map((notif) => (
@@ -143,15 +165,14 @@ const Notifications = () => {
                 ))}
             </ul>
           </li>
-
-          {/* <li className="dropdown-menu-footer border-top">
+          <li className="dropdown-menu-footer border-top">
             <span
               className="dropdown-item text-danger cursor-pointer d-flex justify-content-center p-2 h-px-40 mb-1 align-items-center"
-              onClick={() => showAll()}
+              onClick={() => clearNotif()}
             >
               Clear notifications
             </span>
-          </li> */}
+          </li>
         </ul>
       )}
     </li>
