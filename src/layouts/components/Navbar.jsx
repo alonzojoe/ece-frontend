@@ -4,7 +4,7 @@ import Notifications from "./Notifications";
 const Navbar = ({ toggleSidebar, isToggled }) => {
   return (
     <nav
-      className="m-0 rounded-0 w-auto layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme container-fluid"
+      className="navbar-main m-0 rounded-0 w-auto layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme container-fluid"
       id="layout-navbar"
     >
       <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -22,7 +22,7 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
       >
         <div className="navbar-nav align-items-center">
           <div className="nav-item navbar-search-wrapper mb-2">
-            <h4 className="mt-4 fw-bold">Portal</h4>
+            <h4 className="mt-4 fw-bold">App Porta</h4>
           </div>
         </div>
 
