@@ -27,10 +27,7 @@ export const registrySchema = z
       .email({ message: "Please enter a valid email" }),
     phone: z.string().trim().nonempty({ message: "Phone is required" }),
     gender: z.string().trim().nonempty({ message: "Gender is required" }),
-    position_id: z
-      .string()
-      .nonempty({ message: "Position is required" })
-      .transform((val) => val.trim()),
+    position_id: z.string().min(1, "Position is required"),
     password: z
       .string()
       .trim()
@@ -48,3 +45,19 @@ export const registrySchema = z
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
+
+export const updateSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .nonempty({ message: "Name is required" })
+    .min(3, { message: "Name must be at least 3 characters long" }),
+  email: z
+    .string()
+    .trim()
+    .nonempty({ message: "Email is required" })
+    .email({ message: "Please enter a valid email" }),
+  phone: z.string().trim().nonempty({ message: "Phone is required" }),
+  gender: z.string().trim().nonempty({ message: "Gender is required" }),
+  position_id: z.string().min(1, "Position is required"),
+});

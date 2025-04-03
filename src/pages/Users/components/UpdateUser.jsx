@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "@/components/UI/Modal";
 
 import { useId } from "react";
-import { registrySchema } from "@/schema";
+import { updateSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ToastMessage } from "@/libs/utils";
@@ -18,29 +18,30 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
     formState: { errors, isSubmitting: isLoading },
     reset,
   } = useForm({
-    resolver: zodResolver(registrySchema),
+    resolver: zodResolver(updateSchema),
     defaultValues: {
       name: selectedUser.name,
       email: selectedUser.email,
       phone: selectedUser.phone,
       gender: selectedUser.gender,
-      position_id: selectedUser.position_id,
+      position_id: selectedUser.position_id.toString(),
     },
   });
 
-  const handleSignUp = async (formData) => {
+  const handleUpdate = async (formData) => {
     console.log("registry", formData);
-    await signUp(formData);
+    await updateUser(formData);
   };
 
-  const signUp = async (user) => {
+  const updateUser = async (user) => {
+    const { id } = selectedUser;
     console.log("user", user);
     try {
-      await api.post(`/auth/register`, {
+      await api.patch(`/auth/update/${id}`, {
         ...user,
       });
 
-      notify.notif("success", "Account created successfully");
+      notify.notif("success", "Account updated successfully");
       onClose();
       onRefresh();
     } catch (error) {
@@ -67,7 +68,7 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
 
           <form
             className="mb-3 fv-plugins-bootstrap5 fv-plugins-framework row"
-            onSubmit={handleSubmit((data) => handleSignUp(data))}
+            onSubmit={handleSubmit((data) => handleUpdate(data))}
           >
             <div
               className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-12 col-lg-12 ${
@@ -141,6 +142,7 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
                 className="form-select form-control-sm custom-font"
                 id={`${elId}-gender`}
               >
+                <option value="">Please Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
@@ -158,11 +160,12 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
               </label>
               <select
                 {...register("position_id")}
-                name="position"
+                name="position_id"
                 className="form-select form-control-sm custom-font"
               >
+                <option value="">Please Select</option>
                 {choices.map((c) => (
-                  <option value={c.id} key={c.id}>
+                  <option value={c.id.toString()} key={c.id}>
                     {c.name}
                   </option>
                 ))}
@@ -171,52 +174,12 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
                 {errors.position_id?.message}
               </div>
             </div>
-
-            <div
-              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6 ${
-                errors.password ? "group-invalid" : ""
-              }`}
-            >
-              <label htmlFor={`${elId}-password`} className="form-label">
-                Password
-              </label>
-              <input
-                {...register("password")}
-                type="password"
-                className="form-control"
-                id={`${elId}-password`}
-                maxLength={50}
-              />
-              <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                {errors.password?.message}
-              </div>
-            </div>
-
-            <div
-              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6 ${
-                errors.confirmPassword ? "group-invalid" : ""
-              }`}
-            >
-              <label htmlFor={`${elId}-cpassword`} className="form-label">
-                Confirm Password
-              </label>
-              <input
-                {...register("confirmPassword")}
-                type="password"
-                className="form-control"
-                id={`${elId}-cpassword`}
-                maxLength={50}
-              />
-              <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                {errors.confirmPassword?.message}
-              </div>
-            </div>
             <div className="col-12 mt-3">
               <button
                 className="btn btn-primary d-grid w-100 waves-effect waves-light d-flex gap-2 align-items-center"
                 disabled={isLoading}
               >
-                <span>{isLoading ? "Saving" : "Save"}</span>
+                <span>{isLoading ? "Updating" : "Update"}</span>
                 {isLoading && (
                   <div className="spinner-border text-white" role="status">
                     <span className="visually-hidden">Loading...</span>

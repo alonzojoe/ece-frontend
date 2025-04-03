@@ -133,6 +133,7 @@ const AddUser = ({ positions, onClose, onRefresh }) => {
                 className="form-select form-control-sm custom-font"
                 id={`${elId}-gender`}
               >
+                <option value="">Please Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
@@ -150,9 +151,10 @@ const AddUser = ({ positions, onClose, onRefresh }) => {
               </label>
               <select
                 {...register("position_id")}
-                name="position"
+                name="position_id"
                 className="form-select form-control-sm custom-font"
               >
+                <option value="">Please Select</option>
                 {choices.map((c) => (
                   <option value={c.id} key={c.id}>
                     {c.name}
