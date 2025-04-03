@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Swal from "sweetalert2";
 import useFetch from "@/hooks/useFetch";
 import SearchUser from "./components/SearchUser";
 import Pagination from "@/components/UI/Pagination";
@@ -7,6 +6,7 @@ import useToggle from "@/hooks/useToggle";
 import AddUser from "./components/AddUser";
 import UpdateUser from "./components/UpdateUser";
 import { ToastMessage, ConfirmDialog } from "@/libs/utils";
+import api from "@/services/api";
 
 const initialState = {
   name: "",
@@ -29,9 +29,15 @@ const Users = () => {
   const handleDelete = (id) => {
     dialog
       .confirm("question", "Confirmation", "Are you sure to delete this user?")
-      .then((result) => {
+      .then(async (result) => {
         if (result.isConfirmed) {
           notify.notif("success", "User deleted successfully!");
+          try {
+            await api.patch(`/auth/deactivate/${id}`);
+            refresh();
+          } catch (error) {
+            notify.notif("error", `Something went wrong: ${error?.message}`);
+          }
         }
       });
   };
