@@ -56,6 +56,18 @@ const Notifications = () => {
     setParams({ ...initialParams, random: Date.now() });
   };
 
+  const deleteNotif = async (id) => {
+    setIsPending(true);
+    try {
+      await api.patch(`/notif/update/${id}`);
+      refresh();
+    } catch (error) {
+      notify.notif("error", "Something went wrong.");
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   const clearNotif = () => {
     dialog
       .confirm(
@@ -161,18 +173,24 @@ const Notifications = () => {
                 !error &&
                 notifications?.data?.length > 0 &&
                 notifications.data.map((notif) => (
-                  <NotifItem notif={notif} key={notif.id} />
+                  <NotifItem
+                    notif={notif}
+                    key={notif.id}
+                    onDelete={deleteNotif}
+                  />
                 ))}
             </ul>
           </li>
-          <li className="dropdown-menu-footer border-top">
-            <span
-              className="dropdown-item text-danger cursor-pointer d-flex justify-content-center p-2 h-px-40 mb-1 align-items-center"
-              onClick={() => clearNotif()}
-            >
-              Clear notifications
-            </span>
-          </li>
+          {notifications?.data?.length > 0 && (
+            <li className="dropdown-menu-footer border-top">
+              <span
+                className="dropdown-item text-danger cursor-pointer d-flex justify-content-center p-2 h-px-40 mb-1 align-items-center"
+                onClick={() => clearNotif()}
+              >
+                Clear notifications
+              </span>
+            </li>
+          )}
         </ul>
       )}
     </li>
@@ -181,7 +199,7 @@ const Notifications = () => {
 
 export default React.memo(Notifications);
 
-const NotifItem = React.memo(({ notif }) => {
+const NotifItem = React.memo(({ notif, onDelete }) => {
   const stateMapping = {
     normal: { label: "bg-label-success", icon: "ti ti-check", title: "Alert" },
     warning: {
@@ -231,7 +249,10 @@ const NotifItem = React.memo(({ notif }) => {
           <span className="dropdown-notifications-read">
             {notif.status === 1 && <span className="badge badge-dot"></span>}
           </span>
-          <span className="dropdown-notifications-archive cursor-pointer">
+          <span
+            className="dropdown-notifications-archive cursor-pointer"
+            onClick={() => onDelete(notif.id)}
+          >
             <span className="ti ti-x"></span>
           </span>
         </div>
