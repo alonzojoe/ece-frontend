@@ -1,4 +1,4 @@
-import Modal from "@/components/UI/Modal";
+import MiniModal from "@/components/UI/MiniModal";
 import { useId } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePassSchema } from "@/schema";
@@ -49,7 +49,7 @@ const ChangePassword = ({ onClose, onRefresh, selectedUser }) => {
   };
 
   return (
-    <Modal onClose={() => onClose(false)} details={{ title: "Settings" }}>
+    <MiniModal onClose={() => onClose(false)} details={{ title: "Settings" }}>
       <div className="py-3 px-5">
         <>
           <h3 className="mb-1 fw-bold">Change Password</h3>
@@ -59,7 +59,7 @@ const ChangePassword = ({ onClose, onRefresh, selectedUser }) => {
             onSubmit={handleSubmit((data) => handleChangePass(data))}
           >
             <div
-              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6 ${
+              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-12 col-lg-12 ${
                 errors.email ? "group-invalid" : ""
               }`}
             >
@@ -80,7 +80,7 @@ const ChangePassword = ({ onClose, onRefresh, selectedUser }) => {
             </div>
 
             <div
-              className={`mb-3 fv-plugins-icon-container ${
+              className={`mb-3 fv-plugins-icon-container col-sm-12 col-md-12 col-lg-12 ${
                 errors.oldpassword ? "group-invalid" : ""
               }`}
             >
@@ -100,7 +100,7 @@ const ChangePassword = ({ onClose, onRefresh, selectedUser }) => {
             </div>
 
             <div
-              className={`mb-3 fv-plugins-icon-container ${
+              className={`mb-3 fv-plugins-icon-container col-sm-12 col-md-12 col-lg-12 ${
                 errors.newpassword ? "group-invalid" : ""
               }`}
             >
@@ -156,7 +156,7 @@ const ChangePassword = ({ onClose, onRefresh, selectedUser }) => {
           </form>
         </>
       </div>
-    </Modal>
+    </MiniModal>
   );
 };
 

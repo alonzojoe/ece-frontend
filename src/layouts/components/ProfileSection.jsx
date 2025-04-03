@@ -63,10 +63,7 @@ const ProfileSection = () => {
         </a>
         <ul className="dropdown-menu dropdown-menu-end">
           <li>
-            <a
-              className="dropdown-item"
-              href="pages-account-settings-account.html"
-            >
+            <div className="dropdown-item cursor-pointer" onClick={updateUser}>
               <div className="d-flex">
                 <div className="flex-shrink-0 me-3">
                   <div className="avatar avatar-online">
@@ -82,19 +79,22 @@ const ProfileSection = () => {
                   <small className="text-muted">Admin</small>
                 </div>
               </div>
-            </a>
+            </div>
           </li>
           <li>
             <div className="dropdown-divider"></div>
           </li>
           <li>
-            <div className="dropdown-item" onClick={updateUser}>
+            <div className="dropdown-item cursor-pointer" onClick={updateUser}>
               <i className="ti ti-user-check me-2 ti-sm"></i>
               <span className="align-middle">My Profile</span>
             </div>
           </li>
           <li>
-            <div className="dropdown-item" onClick={updatePassword}>
+            <div
+              className="dropdown-item cursor-pointer"
+              onClick={updatePassword}
+            >
               <i className="ti ti-settings me-2 ti-sm"></i>
               <span className="align-middle">Settings</span>
             </div>
@@ -105,10 +105,10 @@ const ProfileSection = () => {
           </li>
 
           <li>
-            <a className="dropdown-item" href="#" target="_blank">
+            <div className="dropdown-item cursor-pointer">
               <i className="ti ti-logout me-2 ti-sm"></i>
               <span className="align-middle">Log Out</span>
-            </a>
+            </div>
           </li>
         </ul>
       </li>
