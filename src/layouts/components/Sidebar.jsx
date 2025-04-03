@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { MENUS } from "../../constants";
 import { useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 const Sidebar = ({ toggleSidebar, isToggled }) => {
   const { pathname } = useLocation();
-
-  console.log("useLoc", pathname);
 
   return (
     <aside

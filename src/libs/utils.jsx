@@ -108,3 +108,15 @@ export class ToastMessage {
     });
   }
 }
+
+export class ConfirmDialog {
+  confirm(icon, title, text) {
+    return Swal.fire({
+      icon,
+      title,
+      text,
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    });
+  }
+}

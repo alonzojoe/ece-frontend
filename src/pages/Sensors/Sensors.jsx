@@ -4,7 +4,7 @@ import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
 import { useState, useEffect, useRef } from "react";
 import echo from "@/services/sockets";
-import { Notification } from "@/libs/utils.jsx";
+import { Notification, ToastMessage, ConfirmDialog } from "@/libs/utils.jsx";
 import Badge from "@/components/UI/Badge";
 import useToggle from "@/hooks/useToggle";
 import Swal from "sweetalert2";
@@ -12,6 +12,8 @@ import api from "@/services/api";
 import SearchData from "./components/SearchData";
 
 const notif = new Notification();
+const notify = new ToastMessage();
+const dialog = new ConfirmDialog();
 
 const output = (state, payload) => {
   if (!state) return;
@@ -106,13 +108,8 @@ const Sensors = () => {
         building_name: buildingNameRef.current.value,
         user_id: 1,
       });
-      Swal.fire({
-        icon: "success",
-        title: `Information`,
-        text: "Sensor data updated successfully!",
-      }).then(() => {
-        setParams((prev) => ({ ...prev, randomizer: Date.now() }));
-      });
+      notify.notif("success", "Sensor data updated successfully!");
+      setParams((prev) => ({ ...prev, randomizer: Date.now() }));
       toggleModal(false);
     } catch (error) {
       console.log(`error`, error?.message);
@@ -122,22 +119,23 @@ const Sensors = () => {
   };
 
   const handleDelete = (id) => {
-    Swal.fire({
-      icon: "question",
-      title: "Are you sure to delete this record?",
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire("Record has been deleted!", "", "success");
-        try {
-          await api.patch(`/sensor/inactive/${id}`);
-          setParams((prev) => ({ ...prev, randomizer: Date.now() }));
-        } catch (error) {
-          console.log("error", error?.message);
+    dialog
+      .confirm(
+        "question",
+        "Confirmation",
+        "Are you sure to delete this record?"
+      )
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          notify.notif("success", "Record has been deleted!");
+          try {
+            await api.patch(`/sensor/inactive/${id}`);
+            refresh();
+          } catch (error) {
+            console.log("error", error?.message);
+          }
         }
-      }
-    });
+      });
   };
 
   const refresh = () => {

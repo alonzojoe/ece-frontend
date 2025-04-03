@@ -298,8 +298,8 @@ button:disabled {
 }
 
 .nav-x-container {
-  color: #fff;
-  padding: 10px;
+  color: #5D596C;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -308,16 +308,18 @@ button:disabled {
 
 .nav-x-container.active {
   background: #3590E2;
+  color: #fff;
 }
 
 .nav-menu-x {
-  z-index: 99999;
+  z-index: 9999;
   bottom: 5px !important;
 }
 
 .nav-menu-x .nav-menu-x-child {
-  border-radius: 1rem !important;
-  background: #21213C;
+  box-shadow: 0px -2px 4px rgba(93, 89, 108, 0.5);
+  /* border-radius: 1rem !important; */
+  background: #FFFFFF;
   font-weight: 500 !important;
 }
 
@@ -358,7 +360,7 @@ table>thead>tr>th {
 
 
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 480px) {
   .nav-menu-x {
     visibility: visible !important;
   }

@@ -39,6 +39,16 @@
   max-height: 100vh;
 }
 
+.cst-modal-body5 {
+  width: 40vw;
+  height: fit-content;
+  border-top: 10px solid #ffffff;
+  border-bottom: 10px solid #ffffff;
+  animation: openModal 0.5s ease-in forwards;
+  overflow: auto;
+  max-height: 100vh;
+}
+
 .cst-modal-body2 {
   width: 70vw;
   height: fit-content;
@@ -64,6 +74,10 @@
   cursor: pointer;
   transition: 1s;
   transform: scale(1.1);
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
 }
 
 .cst-icon {
@@ -227,6 +241,10 @@
 }
 
 @media screen and (max-width: 767px) {
+  .cst-modal-body5 {
+    width: 90vw;
+  }
+
   .cst-modal-body2 {
     width: 90vw;
   }
@@ -234,4 +252,15 @@
 
 .swal2-shown {
   padding: 0 !important;
+}
+
+.navbar-main {
+  position: fixed !important;
+  width: 100% !important;
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar-main {
+    width: calc(100% - 260px) !important;
+  }
 }
