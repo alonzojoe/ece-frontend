@@ -2,6 +2,7 @@ import defaultImage from "../../assets/images/avatar.jpeg";
 import useFetch from "@/hooks/useFetch";
 import useToggle from "@/hooks/useToggle";
 import UpdateUser from "@/pages/Users/components/UpdateUser";
+import ChangePassword from "./ChangePassword";
 
 const loggedUser = {
   id: 2,
@@ -15,9 +16,13 @@ const loggedUser = {
 const ProfileSection = () => {
   const { data: positions } = useFetch("/position/all", {});
   const [updateForm, toggleUpdateForm] = useToggle(false);
-
+  const [updatePass, toggleUpdatePass] = useToggle(false);
   const updateUser = () => {
     toggleUpdateForm(true);
+  };
+
+  const updatePassword = () => {
+    toggleUpdatePass(true);
   };
 
   const refresh = () => {};
@@ -32,6 +37,15 @@ const ProfileSection = () => {
           selectedUser={loggedUser}
         />
       )}
+
+      {updatePass && (
+        <ChangePassword
+          onClose={toggleUpdatePass}
+          onRefresh={refresh}
+          selectedUser={loggedUser}
+        />
+      )}
+
       <li className="nav-item navbar-dropdown dropdown-user dropdown">
         <a
           className="nav-link dropdown-toggle hide-arrow"
@@ -80,10 +94,10 @@ const ProfileSection = () => {
             </div>
           </li>
           <li>
-            <a className="dropdown-item" href="#">
+            <div className="dropdown-item" onClick={updatePassword}>
               <i className="ti ti-settings me-2 ti-sm"></i>
               <span className="align-middle">Settings</span>
-            </a>
+            </div>
           </li>
 
           <li>
