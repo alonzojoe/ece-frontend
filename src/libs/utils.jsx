@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import moment from "moment";
 export class Notification {
   normal(message, position = "top-right") {
     toast.custom(
@@ -120,3 +121,7 @@ export class ConfirmDialog {
     });
   }
 }
+
+export const formatDateTime = (cdate) => {
+  return moment(cdate).format("lll");
+};
