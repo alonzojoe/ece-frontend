@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import SearchUser from "./components/SearchUser";
 import Pagination from "@/components/UI/Pagination";
@@ -18,6 +18,7 @@ const notify = new ToastMessage();
 const dialog = new ConfirmDialog();
 const Emails = () => {
   const [params, setParams] = useState(initialState);
+  const [selectedItems, setSelectedItems] = useState([]);
   const { data: users, loading, error } = useFetch(`/auth`, params);
 
   const handlePageChange = (page) => {
@@ -49,8 +50,29 @@ const Emails = () => {
     });
   };
 
-  const sendEmail = () => {
-    console.log("Send Email");
+  const handleSelect = useCallback(
+    (e) => {
+      const { value, checked } = e.target;
+      const selectedData = users?.data.find((u) => u.id == value);
+
+      if (checked) {
+        setSelectedItems([...selectedItems, selectedData]);
+      } else {
+        setSelectedItems(selectedItems.filter((item) => item.id != value));
+      }
+    },
+    [users, selectedItems]
+  );
+
+  const sendEmail = async () => {
+    if (selectedItems.length === 0) return;
+    try {
+      await api.post("/notif/send-email", {
+        users: selectedItems,
+      });
+    } catch (error) {
+      notify.notif("error", "Something went wrong.");
+    }
   };
 
   return (
@@ -61,10 +83,14 @@ const Emails = () => {
           className="btn btn-primary position-relative"
           onClick={() => sendEmail()}
         >
-          <i className="ti ti-location-filled"></i> Send Email
+          <i className="ti ti-location-filled"></i> Send Email{"  "}
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            2<span className="visually-hidden">selected</span>
+            {selectedItems.length}
+            <span className="visually-hidden">selected</span>
           </span>
+          <div className="spinner-border text-white mr-1" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </button>
       </div>
       <div className="table-responsive">
@@ -127,8 +153,10 @@ const Emails = () => {
                 <tr key={u.id}>
                   <td className="text-center align-middle fw-normal p-1 m-0">
                     <input
+                      onChange={handleSelect}
                       className="form-check-input"
                       type="checkbox"
+                      checked={selectedItems.some((item) => item.id === u.id)}
                       value={u.id}
                     />
                   </td>
