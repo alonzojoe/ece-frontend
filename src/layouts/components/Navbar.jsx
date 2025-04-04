@@ -22,10 +22,10 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
       >
         <div className="navbar-nav align-items-center">
           <div className="nav-item navbar-search-wrapper mb-2">
-            <h4 className="mt-4 fw-bold">App Porta</h4>
+            <h4 className="mt-4 fw-bold">E-Portal</h4>
           </div>
         </div>
-
+p
         <ul className="navbar-nav flex-row align-items-center ms-auto">
           <li className="nav-item dropdown-language dropdown me-2 me-xl-0">
             <a className="nav-link hide-arrow" href="#">

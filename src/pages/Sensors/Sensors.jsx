@@ -4,7 +4,12 @@ import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
 import { useState, useEffect, useRef } from "react";
 import echo from "@/services/sockets";
-import { Notification, ToastMessage, ConfirmDialog } from "@/libs/utils.jsx";
+import {
+  Notification,
+  ToastMessage,
+  ConfirmDialog,
+  formatDateTime,
+} from "@/libs/utils.jsx";
 import Badge from "@/components/UI/Badge";
 import useToggle from "@/hooks/useToggle";
 import Swal from "sweetalert2";
@@ -285,6 +290,9 @@ const Sensors = () => {
                   Angle of Deflection
                 </th>
                 <th className="text-center text-white p-1 py-2 m-0">Status</th>
+                <th className="text-center text-white p-1 py-2 m-0">
+                  Created At
+                </th>
                 <th className="text-center text-white p-1 py-2 m-0">Options</th>
               </tr>
             </thead>
@@ -293,7 +301,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="7"
+                    colSpan="8"
                   >
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="d-flex align-items-center jusitfy-content-center">
@@ -314,7 +322,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle text-danger fw-normal p-1 m-0"
-                    colSpan="7"
+                    colSpan="8"
                   >
                     Something went wrong :(
                   </td>
@@ -325,7 +333,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="7"
+                    colSpan="8"
                   >
                     No records found.
                   </td>
@@ -354,6 +362,9 @@ const Sensors = () => {
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.notification && <Badge state={s.notification.state} />}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {formatDateTime(s.created_at)}
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       <div className="d-flex align-items-center justify-content-center gap-2">
