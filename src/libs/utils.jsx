@@ -125,3 +125,13 @@ export class ConfirmDialog {
 export const formatDateTime = (cdate) => {
   return moment(cdate).format("lll");
 };
+
+export const setLocalStorage = (key, value) => {
+  const stringifiedVal = JSON.stringify(value);
+  localStorage.setItem(key, stringifiedVal);
+};
+
+export const getLocalStorage = (key) => {
+  const storedValue = localStorage.getItem(key);
+  return JSON.parse(storedValue) ?? undefined;
+};
