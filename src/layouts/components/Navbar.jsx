@@ -1,7 +1,11 @@
 import ProfileSection from "@/layouts/components/ProfileSection";
 import Notifications from "./Notifications";
+import UserContext from "@/context/user-context";
+import { useContext } from "react";
 
 const Navbar = ({ toggleSidebar, isToggled }) => {
+  const { user } = useContext(UserContext);
+
   return (
     <nav
       className="navbar-main m-0 rounded-0 w-auto layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme container-fluid"
@@ -41,7 +45,7 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
             id="user-name"
           >
             <a className="nav-link hide-arrow" href="#">
-              <h5 className="mt-3 fw-bolder">Administrator</h5>
+              <h5 className="mt-3 fw-bolder">{user?.name}</h5>
             </a>
           </li>
 
