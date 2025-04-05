@@ -1,8 +1,15 @@
 import { authSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import api from "@/services/api";
+import { setLocalStorage, ToastMessage } from "@/libs/utils";
+import { useNavigate } from "react-router-dom";
+
+const notify = new ToastMessage();
 
 const Login = ({ onToggle }) => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -12,11 +19,24 @@ const Login = ({ onToggle }) => {
 
   const handleSignIn = async (formData) => {
     console.log("login data", formData);
+    const { email, password } = formData;
+    try {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-    
-
-
-    reset();
+      const { token } = res.data.authorization;
+      const { user } = res.data;
+      setLocalStorage("auth-token", token);
+      setLocalStorage("auth-user", user);
+      navigate("/home");
+    } catch (error) {
+      console.log(error?.message);
+      notify.notif("error", "Invalid email or password");
+    } finally {
+      reset();
+    }
   };
 
   return (
