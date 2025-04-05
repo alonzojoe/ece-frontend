@@ -5,7 +5,9 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const storeUser = (value) => {
-    setUser(value);
+    if (JSON.stringify(user) !== JSON.stringify(value)) {
+      setUser(value);
+    }
   };
 
   const clearUser = () => {
