@@ -5,9 +5,19 @@ import useToggle from "@/hooks/useToggle";
 import Login from "@/pages/Auth/components/Login";
 import Register from "@/pages/Auth/components/Register";
 import useFetch from "@/hooks/useFetch";
+import { getLocalStorage } from "@/libs/utils";
+import { useNavigate } from "react-router-dom";
 const Auth = () => {
   const [tab, toggleTab] = useToggle(false);
   const { data: positions } = useFetch("/position/all", {});
+  const navigate = useNavigate();
+  const authToken = getLocalStorage("auth-token");
+
+  if (authToken) {
+    navigate("/home");
+    return;
+  }
+
   return (
     <div className="authentication-wrapper authentication-cover authentication-bg">
       <div className="authentication-inner row">

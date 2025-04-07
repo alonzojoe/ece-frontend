@@ -122,7 +122,7 @@ const Settings = () => {
   };
 
   const refresh = (val) => {
-    setParams((prev) => ({ ...prev, page: 1, name: val }));
+    setParams((prev) => ({ ...prev, page: 1, name: val, random: Date.now() }));
   };
 
   return (
