@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { MENUS } from "../../constants";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { logout } from "@/libs/utils";
 
 const Sidebar = ({ toggleSidebar, isToggled }) => {
   const { pathname } = useLocation();
@@ -80,10 +81,10 @@ const Sidebar = ({ toggleSidebar, isToggled }) => {
           <span className="menu-header-text">Auth</span>
         </li>
         <li className="menu-item">
-          <a href="#" className="menu-link">
+          <div className="menu-link cursor-pointer" onClick={logout}>
             <i className="menu-icon tf-icons ti ti-logout"></i>
             <div data-i18n="logout">Logout</div>
-          </a>
+          </div>
         </li>
       </ul>
     </aside>

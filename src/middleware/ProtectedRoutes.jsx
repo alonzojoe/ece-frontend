@@ -17,7 +17,7 @@ const ProtectedRoutes = () => {
   }, [authUser, authToken, storeUser]);
 
   if (!authToken || !authUser) {
-    window.location.href = "http://localhost:5173";
+    window.location.href = "/";
   }
 
   return (

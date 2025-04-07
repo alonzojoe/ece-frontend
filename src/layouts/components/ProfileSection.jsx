@@ -5,7 +5,7 @@ import UpdateUser from "@/pages/Users/components/UpdateUser";
 import ChangePassword from "./ChangePassword";
 import { useContext } from "react";
 import UserContext from "@/context/user-context";
-import { getLocalStorage } from "@/libs/utils";
+import { getLocalStorage, logout } from "@/libs/utils";
 
 // const loggedUser = {
 //   id: 2,
@@ -115,7 +115,7 @@ const ProfileSection = () => {
           </li>
 
           <li>
-            <div className="dropdown-item cursor-pointer">
+            <div className="dropdown-item cursor-pointer" onClick={logout}>
               <i className="ti ti-logout me-2 ti-sm"></i>
               <span className="align-middle">Log Out</span>
             </div>

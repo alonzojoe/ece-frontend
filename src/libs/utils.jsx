@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import moment from "moment";
+import api from "@/services/api";
 export class Notification {
   normal(message, position = "top-right") {
     toast.custom(
@@ -134,4 +135,11 @@ export const setLocalStorage = (key, value) => {
 export const getLocalStorage = (key) => {
   const storedValue = localStorage.getItem(key);
   return JSON.parse(storedValue) ?? undefined;
+};
+
+export const logout = () => {
+  api.post("/auth/logout");
+  localStorage.removeItem("auth-token");
+  localStorage.removeItem("auth-user");
+  window.location.href = "/";
 };
