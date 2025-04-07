@@ -25,9 +25,12 @@ import "@/assets/css/custom-style.css";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "@/assets/vendor/libs/spinkit/spinkit.css";
 import "@/index.css";
+import UserProvider from "@/context/user-provider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <UserProvider>
     <App />
+    </UserProvider>
   </StrictMode>
 );

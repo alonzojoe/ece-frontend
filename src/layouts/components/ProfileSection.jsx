@@ -3,6 +3,8 @@ import useFetch from "@/hooks/useFetch";
 import useToggle from "@/hooks/useToggle";
 import UpdateUser from "@/pages/Users/components/UpdateUser";
 import ChangePassword from "./ChangePassword";
+import { useContext } from "react";
+import UserContext from "@/context/user-context";
 
 const loggedUser = {
   id: 2,
@@ -17,6 +19,9 @@ const ProfileSection = () => {
   const { data: positions } = useFetch("/position/all", {});
   const [updateForm, toggleUpdateForm] = useToggle(false);
   const [updatePass, toggleUpdatePass] = useToggle(false);
+
+  const { user } = useContext(UserContext);
+
   const updateUser = () => {
     toggleUpdateForm(true);
   };
@@ -74,8 +79,8 @@ const ProfileSection = () => {
                   </div>
                 </div>
                 <div className="flex-grow-1">
-                  <span className="fw-medium d-block">Administrator</span>
-                  <small className="text-muted">Admin</small>
+                  <span className="fw-medium d-block">{user?.name}</span>
+                  <small className="text-muted">{user?.position?.name}</small>
                 </div>
               </div>
             </div>
