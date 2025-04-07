@@ -1,0 +1,114 @@
+import MiniModal from "@/components/UI/MiniModal";
+import { ToastMessage } from "@/libs/utils";
+import { useState } from "react";
+import api from "@/services/api";
+import moment from "moment";
+
+const notify = new ToastMessage();
+
+const initialPayload = {
+  date_from: moment().format("YYYY-MM-DD"),
+  date_to: moment().format("YYYY-MM-DD"),
+};
+
+console.log("init payload", initialPayload);
+
+const EmailData = ({ recipients }) => {
+  const [payload, setPayload] = useState(initialPayload);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.get("/sensor/all", {
+        params: {
+          date_from: moment(payload.date_from).format("YYYY-MM-DD"),
+          date_to: moment(payload.date_to).format("YYYY-MM-DD"),
+        },
+      });
+      console.log("response email sensor:", res.data);
+      console.log(handleSearch);
+
+      const emailData = res.data ?? [];
+    } catch (error) {
+      notify.notif("error", "Something went wrong.");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPayload((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const sendEmail = async () => {};
+
+  return (
+    <MiniModal onClose={() => {}} details={{ title: "Email Details" }}>
+      <div className="py-3 px-5">
+        <>
+          <h3 className="mb-1 fw-bold">Filter Sensor Data</h3>
+
+          <form
+            className="mb-3 fv-plugins-bootstrap5 fv-plugins-framework row"
+            onSubmit={handleSearch}
+          >
+            <div
+              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6`}
+            >
+              <label htmlFor={`date-from`} className="form-label">
+                Date From
+              </label>
+              <input
+                type="date"
+                name="date_from"
+                className="form-control"
+                value={payload.date_from}
+                onChange={handleChange}
+              />
+            </div>
+            <div
+              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6`}
+            >
+              <label htmlFor={`date-from`} className="form-label">
+                Date To
+              </label>
+              <input
+                type="date"
+                name="date_to"
+                className="form-control"
+                value={payload.date_to}
+                onChange={handleChange}
+              />
+            </div>
+            {/* <div
+            className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6`}
+          >
+            <label htmlFor={`date-from`} className="form-label">
+              Position
+            </label>
+            <select
+              name="date-from"
+              className="form-select form-control-sm custom-font"
+            >
+              <option value="">Please Select</option>
+            </select>
+          </div> */}
+            <div className="col-12 mt-3">
+              <button className="btn btn-primary d-grid w-100 waves-effect waves-light d-flex gap-2 align-items-center">
+                <span>Send</span>
+
+                <div className="spinner-border text-white" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </button>
+            </div>
+          </form>
+        </>
+      </div>
+    </MiniModal>
+  );
+};
+
+export default EmailData;
