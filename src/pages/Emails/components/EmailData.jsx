@@ -15,9 +15,11 @@ console.log("init payload", initialPayload);
 
 const EmailData = ({ recipients, onClose }) => {
   const [payload, setPayload] = useState(initialPayload);
+  const [isPending, setIsPeding] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    setIsPeding(true);
     try {
       const res = await api.get("/sensor/all", {
         params: {
@@ -32,8 +34,12 @@ const EmailData = ({ recipients, onClose }) => {
         return;
       }
       await sendEmail(emailData);
+      notify.notif("success", "Email sent successfully.");
+      onClose();
     } catch (error) {
-      notify.notif("error", "Something went wrong.");
+      notify.notif("error", "Something went wrong. Please try again.");
+    } finally {
+      setIsPeding(false);
     }
   };
 
@@ -62,15 +68,13 @@ const EmailData = ({ recipients, onClose }) => {
     <MiniModal onClose={onClose} details={{ title: "Email Details" }}>
       <div className="py-3 px-5">
         <>
-          <h3 className="mb-1 fw-bold">Filter Sensor Data</h3>
+          <h3 className="mb-1 fw-bold">Select Sensor Data</h3>
 
           <form
             className="mb-3 fv-plugins-bootstrap5 fv-plugins-framework row"
             onSubmit={handleSearch}
           >
-            <div
-              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6`}
-            >
+            <div className={`mb-2 fv-plugins-icon-container col-12`}>
               <label htmlFor={`date-from`} className="form-label">
                 Date From
               </label>
@@ -82,9 +86,7 @@ const EmailData = ({ recipients, onClose }) => {
                 onChange={handleChange}
               />
             </div>
-            <div
-              className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6`}
-            >
+            <div className={`mb-2 fv-plugins-icon-container col-12`}>
               <label htmlFor={`date-from`} className="form-label">
                 Date To
               </label>
@@ -110,12 +112,17 @@ const EmailData = ({ recipients, onClose }) => {
             </select>
           </div> */}
             <div className="col-12 mt-3">
-              <button className="btn btn-primary d-grid w-100 waves-effect waves-light d-flex gap-2 align-items-center">
-                <span>Send</span>
-
-                <div className="spinner-border text-white" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
+              <button
+                className="btn btn-primary d-grid w-100 waves-effect waves-light d-flex gap-2 align-items-center"
+                disabled={isPending}
+              >
+                <i className="ti ti-location-filled"></i>{" "}
+                <span>{isPending ? "Sending..." : "Send"}</span>
+                {isPending && (
+                  <div className="spinner-border text-white" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
               </button>
             </div>
           </form>

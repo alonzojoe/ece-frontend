@@ -92,9 +92,6 @@ const Emails = () => {
               {selectedItems.length}
               <span className="visually-hidden">selected</span>
             </span>
-            <div className="spinner-border text-white mr-1" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
           </button>
         </div>
         <div className="table-responsive">
