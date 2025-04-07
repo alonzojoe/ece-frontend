@@ -135,19 +135,15 @@ const Notifications = () => {
           </li>
           <li className="notif-container dropdown-notifications-list scrollable-container ps">
             <ul className="list-group list-group-flush">
-              {loading ||
-                (isPending && (
-                  <li>
-                    <div className="d-flex align-items-center justify-content-center mt-5">
-                      <div
-                        className="spinner-border text-primary"
-                        role="status"
-                      >
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
+              {(loading || isPending) && (
+                <li>
+                  <div className="d-flex align-items-center justify-content-center mt-5">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
                     </div>
-                  </li>
-                ))}
+                  </div>
+                </li>
+              )}
               {error && (
                 <li>
                   <div className="d-flex align-items-center justify-content-center mt-5">
