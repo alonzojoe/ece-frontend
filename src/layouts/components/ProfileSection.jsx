@@ -5,20 +5,26 @@ import UpdateUser from "@/pages/Users/components/UpdateUser";
 import ChangePassword from "./ChangePassword";
 import { useContext } from "react";
 import UserContext from "@/context/user-context";
+import { getLocalStorage } from "@/libs/utils";
 
-const loggedUser = {
-  id: 2,
-  name: "Elie",
-  email: "eli@gmail.com",
-  phone: "9595626265",
-  gender: "Female",
-  position_id: "3",
-};
+// const loggedUser = {
+//   id: 2,
+//   name: "Elie",
+//   email: "eli@gmail.com",
+//   phone: "9595626265",
+//   gender: "Female",
+//   position_id: "3",
+// };
 
 const ProfileSection = () => {
   const { data: positions } = useFetch("/position/all", {});
   const [updateForm, toggleUpdateForm] = useToggle(false);
   const [updatePass, toggleUpdatePass] = useToggle(false);
+  const storedUser = getLocalStorage("auth-user");
+  const loggedUser = {
+    ...storedUser,
+    position_id: storedUser.position_id.toString(),
+  };
 
   const { user } = useContext(UserContext);
 
