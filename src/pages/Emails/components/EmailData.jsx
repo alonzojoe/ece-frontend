@@ -13,7 +13,7 @@ const initialPayload = {
 
 console.log("init payload", initialPayload);
 
-const EmailData = ({ recipients }) => {
+const EmailData = ({ recipients, onClose }) => {
   const [payload, setPayload] = useState(initialPayload);
 
   const handleSearch = async (e) => {
@@ -25,10 +25,13 @@ const EmailData = ({ recipients }) => {
           date_to: moment(payload.date_to).format("YYYY-MM-DD"),
         },
       });
-      console.log("response email sensor:", res.data);
-      console.log(handleSearch);
 
-      const emailData = res.data ?? [];
+      const emailData = res.data.data ?? [];
+      if (emailData.length === 0) {
+        notify.notif("error", "No results were found.");
+        return;
+      }
+      await sendEmail(emailData);
     } catch (error) {
       notify.notif("error", "Something went wrong.");
     }
@@ -42,10 +45,21 @@ const EmailData = ({ recipients }) => {
     }));
   };
 
-  const sendEmail = async () => {};
+  const sendEmail = async (data) => {
+    console.log("recepients: ", recipients);
+    console.log("email data:", data);
+    try {
+      await api.post("/notif/send-email", {
+        recipients,
+        data,
+      });
+    } catch (e) {
+      notify.notif("error", "Something went wrong.");
+    }
+  };
 
   return (
-    <MiniModal onClose={() => {}} details={{ title: "Email Details" }}>
+    <MiniModal onClose={onClose} details={{ title: "Email Details" }}>
       <div className="py-3 px-5">
         <>
           <h3 className="mb-1 fw-bold">Filter Sensor Data</h3>

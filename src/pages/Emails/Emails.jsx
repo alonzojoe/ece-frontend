@@ -18,6 +18,7 @@ const notify = new ToastMessage();
 const dialog = new ConfirmDialog();
 const Emails = () => {
   const [params, setParams] = useState(initialState);
+  const [showEmail, setShowEmail] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const { data: users, loading, error } = useFetch(`/auth`, params);
 
@@ -65,19 +66,19 @@ const Emails = () => {
   );
 
   const sendEmail = async () => {
-    // if (selectedItems.length === 0) return;
-    // try {
-    //   await api.post("/notif/send-email", {
-    //     users: selectedItems,
-    //   });
-    // } catch (error) {
-    //   notify.notif("error", "Something went wrong.");
-    // }
+    if (selectedItems.length === 0)
+      return notify.notif("error", "Please select email recepients");
+    setShowEmail(true);
   };
 
   return (
     <>
-      <EmailData />
+      {showEmail && (
+        <EmailData
+          recipients={selectedItems}
+          onClose={() => setShowEmail(false)}
+        />
+      )}
 
       <div className="card mt-3">
         <SearchUser onSearch={handleSearch} onRefresh={refresh} />
