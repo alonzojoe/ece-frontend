@@ -28,9 +28,9 @@ import "@/index.css";
 import UserProvider from "@/context/user-provider.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <UserProvider>
+  // <StrictMode>
+  <UserProvider>
     <App />
-    </UserProvider>
-  </StrictMode>
+  </UserProvider>
+  // </StrictMode>
 );

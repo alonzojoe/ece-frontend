@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import SearchUser from "./components/SearchUser";
 import Pagination from "@/components/UI/Pagination";
 import { ToastMessage, ConfirmDialog } from "@/libs/utils";
-import api from "@/services/api";
+import EmailData from "./components/EmailData";
 
 const initialState = {
   name: "",
@@ -18,6 +18,8 @@ const notify = new ToastMessage();
 const dialog = new ConfirmDialog();
 const Emails = () => {
   const [params, setParams] = useState(initialState);
+  const [showEmail, setShowEmail] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
   const { data: users, loading, error } = useFetch(`/auth`, params);
 
   const handlePageChange = (page) => {
@@ -49,117 +51,148 @@ const Emails = () => {
     });
   };
 
-  const sendEmail = () => {
-    console.log("Send Email");
+  const handleSelect = useCallback(
+    (e) => {
+      const { value, checked } = e.target;
+      const selectedData = users?.data.find((u) => u.id == value);
+
+      if (checked) {
+        setSelectedItems([...selectedItems, selectedData]);
+      } else {
+        setSelectedItems(selectedItems.filter((item) => item.id != value));
+      }
+    },
+    [users, selectedItems]
+  );
+
+  const sendEmail = async () => {
+    if (selectedItems.length === 0)
+      return notify.notif("error", "Please select email recepients");
+    setShowEmail(true);
   };
 
   return (
-    <div className="card mt-3">
-      <SearchUser onSearch={handleSearch} onRefresh={refresh} />
-      <div className="d-flex justify-start my-3">
-        <button
-          className="btn btn-primary position-relative"
-          onClick={() => sendEmail()}
-        >
-          <i className="ti ti-location-filled"></i> Send Email
-          <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            2<span className="visually-hidden">selected</span>
-          </span>
-        </button>
-      </div>
-      <div className="table-responsive">
-        <table className="table table-hover bg-white">
-          <thead>
-            <tr className="text-dark fw-bold bg-primary">
-              <th className="text-center text-white py-2 m-0">Select</th>
-              <th className="text-center text-white py-2 m-0">Name</th>
-              <th className="text-center text-white py-2 m-0">Email</th>
-              <th className="text-center text-white py-2 m-0">Gender</th>
-              <th className="text-center text-white py-2 m-0">Phone</th>
-              <th className="text-center text-white py-2 m-0">Position</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading && (
-              <tr>
-                <td
-                  className="text-center align-middle fw-normal p-1 m-0"
-                  colSpan="7"
-                >
-                  <div className="d-flex align-items-center justify-content-center">
-                    <div className="d-flex align-items-center jusitfy-content-center">
-                      <div className="sk-wave sk-primary">
-                        <div className="sk-wave-rect"></div>
-                        <div className="sk-wave-rect"></div>
-                        <div className="sk-wave-rect"></div>
-                        <div className="sk-wave-rect"></div>
-                        <div className="sk-wave-rect"></div>
+    <>
+      {showEmail && (
+        <EmailData
+          recipients={selectedItems}
+          onClose={() => setShowEmail(false)}
+        />
+      )}
+
+      <div className="card mt-3">
+        <SearchUser onSearch={handleSearch} onRefresh={refresh} />
+        <div className="d-flex justify-start my-3">
+          <button
+            className="btn btn-primary position-relative"
+            onClick={() => sendEmail()}
+          >
+            <i className="ti ti-location-filled"></i> Send Email{"  "}
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {selectedItems.length}
+              <span className="visually-hidden">selected</span>
+            </span>
+            <div className="spinner-border text-white mr-1" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </button>
+        </div>
+        <div className="table-responsive">
+          <table className="table table-hover bg-white">
+            <thead>
+              <tr className="text-dark fw-bold bg-primary">
+                <th className="text-center text-white py-2 m-0">Select</th>
+                <th className="text-center text-white py-2 m-0">Name</th>
+                <th className="text-center text-white py-2 m-0">Email</th>
+                <th className="text-center text-white py-2 m-0">Gender</th>
+                <th className="text-center text-white py-2 m-0">Phone</th>
+                <th className="text-center text-white py-2 m-0">Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading && (
+                <tr>
+                  <td
+                    className="text-center align-middle fw-normal p-1 m-0"
+                    colSpan="7"
+                  >
+                    <div className="d-flex align-items-center justify-content-center">
+                      <div className="d-flex align-items-center jusitfy-content-center">
+                        <div className="sk-wave sk-primary">
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                          <div className="sk-wave-rect"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            )}
-            {error && (
-              <tr>
-                <td
-                  className="text-center align-middle text-danger fw-normal p-1 m-0"
-                  colSpan="6"
-                >
-                  Something went wrong :(
-                </td>
-              </tr>
-            )}
-            {!loading && !error && !users?.data?.length && (
-              <tr>
-                <td
-                  className="text-center align-middle fw-normal p-1 m-0"
-                  colSpan="6"
-                >
-                  No records found.
-                </td>
-              </tr>
-            )}
-            {!loading &&
-              !error &&
-              users?.data?.length > 0 &&
-              users.data.map((u) => (
-                <tr key={u.id}>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value={u.id}
-                    />
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    {u.name.toUpperCase()}
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    {u.email}
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    {u.gender.toUpperCase()}
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    {u.phone}
-                  </td>
-                  <td className="text-center align-middle fw-normal p-1 m-0">
-                    {u.position?.name.toUpperCase() ?? ""}
                   </td>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-        {!loading && users?.data?.length > 0 && (
-          <Pagination
-            currentPage={params.page}
-            totalPages={users.total_pages}
-            onPageChange={handlePageChange}
-          />
-        )}
+              )}
+              {error && (
+                <tr>
+                  <td
+                    className="text-center align-middle text-danger fw-normal p-1 m-0"
+                    colSpan="6"
+                  >
+                    Something went wrong :(
+                  </td>
+                </tr>
+              )}
+              {!loading && !error && !users?.data?.length && (
+                <tr>
+                  <td
+                    className="text-center align-middle fw-normal p-1 m-0"
+                    colSpan="6"
+                  >
+                    No records found.
+                  </td>
+                </tr>
+              )}
+              {!loading &&
+                !error &&
+                users?.data?.length > 0 &&
+                users.data.map((u) => (
+                  <tr key={u.id}>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      <input
+                        onChange={handleSelect}
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={selectedItems.some((item) => item.id === u.id)}
+                        value={u.id}
+                      />
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {u.name.toUpperCase()}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {u.email}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {u.gender.toUpperCase()}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {u.phone}
+                    </td>
+                    <td className="text-center align-middle fw-normal p-1 m-0">
+                      {u.position?.name.toUpperCase() ?? ""}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          {!loading && users?.data?.length > 0 && (
+            <Pagination
+              currentPage={params.page}
+              totalPages={users.total_pages}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

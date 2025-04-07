@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Modal from "@/components/UI/Modal";
 
 import { useId } from "react";
 import { updateSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ToastMessage } from "@/libs/utils";
+import { ToastMessage, setLocalStorage } from "@/libs/utils";
 import api from "@/services/api";
 
 const notify = new ToastMessage();
@@ -40,7 +40,7 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
       await api.patch(`/auth/update/${id}`, {
         ...user,
       });
-
+      await updatedUser();
       notify.notif("success", "Account updated successfully");
       onClose();
       onRefresh();
@@ -55,8 +55,30 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
     }
   };
 
-  const choices = positions.data.filter((pos) => pos.id !== 1);
+  const updatedUser = async () => {
+    try {
+      const res = await api.post("/auth/me");
+      const { user } = res.data;
+      setLocalStorage("auth-user", user);
+      console.log("res auth me", user);
+    } catch (error) {
+      console.log("error", error?.message);
+    } finally {
+      window.location.reload();
+    }
+  };
+
+  // const choices = positions.data.filter((pos) => pos.id !== 1);
+
+  const choices =
+    useMemo(() => {
+      return selectedUser.id == 1
+        ? positions.data
+        : positions.data.filter((pos) => pos.id !== 1);
+    }, [positions, selectedUser]) ?? [];
+
   if (!choices) return <p>Loading</p>;
+
   return (
     <Modal
       onClose={() => onClose(false)}
@@ -162,6 +184,7 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
                 {...register("position_id")}
                 name="position_id"
                 className="form-select form-control-sm custom-font"
+                disabled={selectedUser.id == 1}
               >
                 <option value="">Please Select</option>
                 {choices.map((c) => (

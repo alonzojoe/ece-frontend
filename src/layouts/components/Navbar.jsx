@@ -44,9 +44,9 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
             className="nav-item dropdown-language dropdown me-2 me-xl-0"
             id="user-name"
           >
-            <a className="nav-link hide-arrow" href="#">
+            <span className="nav-link hide-arrow">
               <h5 className="mt-3 fw-bolder">{user?.name}</h5>
-            </a>
+            </span>
           </li>
 
           {/* <li className="nav-item navbar-dropdown dropdown-user">
