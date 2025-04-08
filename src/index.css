@@ -295,3 +295,10 @@ html:not([dir="rtl"]) .app-brand-text {
   /* font-size: 1.375rem; */
   font-size: 1.05rem;
 }
+
+
+.error-page {
+  height: 100dvh;
+  width: 100vw;
+  background: #ffffff;
+}

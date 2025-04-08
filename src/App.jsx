@@ -6,6 +6,8 @@ import Auth from "@/pages/Auth/Auth";
 import Emails from "@/pages/Emails/Emails";
 import Settings from "@/pages/Settings/Settings";
 import Users from "@/pages/Users/Users";
+import NotFound from "./pages/Others/NotFound";
+import Unauthorized from "./pages/Others/Unauthorized";
 import { Toaster } from "react-hot-toast";
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
+          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
