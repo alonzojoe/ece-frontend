@@ -189,7 +189,7 @@ const Sensors = () => {
               <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Load
+                    Load (N)
                   </label>
                   <input
                     type="text"
@@ -202,7 +202,7 @@ const Sensors = () => {
               <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Deflection
+                    Deflection (mm)
                   </label>
                   <input
                     type="text"
@@ -215,7 +215,7 @@ const Sensors = () => {
               <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
-                    Angle of Deflection
+                    Angle of Deflection (°)
                   </label>
                   <input
                     type="text"
@@ -277,17 +277,20 @@ const Sensors = () => {
         <div className="table-responsive mt-3">
           <table className="table table-bordered table-hover">
             <thead className="bg-primary">
-              <tr style={{ textTransform: "capitalize !important" }}>
+              <tr style={{ textTransform: "capitalize" }}>
                 <th className="text-center text-white p-1 py-2 m-0">ID</th>
                 <th className="text-center text-white p-1 py-2 m-0">
                   Building Name
                 </th>
-                <th className="text-center text-white p-1 py-2 m-0">Load</th>
                 <th className="text-center text-white p-1 py-2 m-0">
-                  Deflection
+                  Load (N)
                 </th>
                 <th className="text-center text-white p-1 py-2 m-0">
-                  Angle of Deflection
+                  Deflection{" "}
+                  <span style={{ textTransform: "lowercase" }}>(mm)</span>
+                </th>
+                <th className="text-center text-white p-1 py-2 m-0">
+                  Angle of Deflection (°)
                 </th>
                 <th className="text-center text-white p-1 py-2 m-0">Status</th>
                 <th className="text-center text-white p-1 py-2 m-0">
@@ -352,13 +355,13 @@ const Sensors = () => {
                       {s.building_name}
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
-                      {s.load}
+                      {s.load} N
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
-                      {s.deflection}
+                      {s.deflection} mm
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
-                      {s.angle_of_deflection}
+                      {s.angle_of_deflection} °
                     </td>
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.notification && <Badge state={s.notification.state} />}
