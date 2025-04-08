@@ -77,6 +77,7 @@ const Emails = () => {
         <EmailData
           recipients={selectedItems}
           onClose={() => setShowEmail(false)}
+          onClear={() => setSelectedItems([])}
         />
       )}
 

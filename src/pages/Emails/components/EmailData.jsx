@@ -13,7 +13,7 @@ const initialPayload = {
 
 console.log("init payload", initialPayload);
 
-const EmailData = ({ recipients, onClose }) => {
+const EmailData = ({ recipients, onClose, onClear }) => {
   const [payload, setPayload] = useState(initialPayload);
   const [isPending, setIsPeding] = useState(false);
 
@@ -35,6 +35,7 @@ const EmailData = ({ recipients, onClose }) => {
       }
       await sendEmail(emailData);
       notify.notif("success", "Email sent successfully.");
+      onClear();
       onClose();
     } catch (error) {
       notify.notif("error", "Something went wrong. Please try again.");
