@@ -2,7 +2,7 @@ import { useId } from "react";
 import { registrySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ToastMessage } from "@/libs/utils";
+import { ToastMessage, handlePhoneInput } from "@/libs/utils";
 import { useState } from "react";
 import api from "@/services/api";
 
@@ -108,6 +108,7 @@ const Register = ({ onToggle, positions }) => {
             className="form-control"
             id={`${elId}-phone`}
             maxLength={10}
+            onChange={handlePhoneInput}
           />
           <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
             {errors.phone?.message}

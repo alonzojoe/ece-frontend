@@ -5,7 +5,7 @@ import { useId } from "react";
 import { updateSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ToastMessage, setLocalStorage } from "@/libs/utils";
+import { ToastMessage, setLocalStorage, handlePhoneInput } from "@/libs/utils";
 import api from "@/services/api";
 
 const notify = new ToastMessage();
@@ -144,7 +144,8 @@ const UpdateUser = ({ positions, onClose, onRefresh, selectedUser }) => {
                 type="text"
                 className="form-control"
                 id={`${elId}-phone`}
-                maxLength={10}
+                maxLength={11}
+                onChange={handlePhoneInput}
               />
               <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 {errors.phone?.message}
