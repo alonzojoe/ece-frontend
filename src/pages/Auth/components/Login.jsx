@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import api from "@/services/api";
 import { setLocalStorage, ToastMessage } from "@/libs/utils";
 import { useNavigate } from "react-router-dom";
+import AppLogo from "@/assets/images/app-logo.png";
 
 const notify = new ToastMessage();
 
@@ -41,8 +42,15 @@ const Login = ({ onToggle }) => {
 
   return (
     <>
-      <h3 className="mb-1 fw-bold">Welcome to System Name! 👋</h3>
-      <p className="mb-4">Please sign-in to your account.</p>
+      <div className="app-brand mb-3">
+        <span className="cursor-pointer app-brand-link gap-2">
+          <span>
+            <img src={AppLogo} height={50} width={50} alt="Logo" />
+          </span>
+        </span>
+      </div>
+      <h3 className="mb-3 fw-bold">Welcome to Beam Sensor 109!</h3>
+      <p className="mb-2">Please sign-in to your account.</p>
 
       <form
         className="mb-3 fv-plugins-bootstrap5 fv-plugins-framework"

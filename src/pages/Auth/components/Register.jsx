@@ -45,7 +45,7 @@ const Register = ({ onToggle, positions }) => {
     }
   };
 
-  const choices = positions.data.filter((pos) => pos.id !== 1);
+  const choices = positions.data.filter((pos) => pos.id !== 1) ?? [];
 
   return (
     <>
