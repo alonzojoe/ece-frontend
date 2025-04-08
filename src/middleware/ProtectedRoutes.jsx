@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { getLocalStorage } from "@/libs/utils";
 import { setupToken } from "@/services/api";
 import { useContext, useEffect } from "react";
@@ -15,6 +15,15 @@ const ProtectedRoutes = () => {
       setupToken(authToken);
     }
   }, [authUser, authToken, storeUser]);
+
+  const restrictedRoutes = ["/home/settings", "/home/notify", "/home/users"];
+
+  if (
+    authUser.position_id != 1 &&
+    restrictedRoutes.includes(location.pathname)
+  ) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
   if (!authToken || !authUser) {
     window.location.href = "/";
