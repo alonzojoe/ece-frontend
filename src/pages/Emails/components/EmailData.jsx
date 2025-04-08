@@ -2,6 +2,7 @@ import MiniModal from "@/components/UI/MiniModal";
 import { ToastMessage } from "@/libs/utils";
 import { useState } from "react";
 import api from "@/services/api";
+import useOnline from "@/hooks/useOnline";
 import moment from "moment";
 
 const notify = new ToastMessage();
@@ -13,13 +14,18 @@ const initialPayload = {
 
 console.log("init payload", initialPayload);
 
-const EmailData = ({ recipients, onClose }) => {
+const EmailData = ({ recipients, onClose, onClear }) => {
   const [payload, setPayload] = useState(initialPayload);
-  const [isPending, setIsPeding] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+  const isOnline = useOnline();
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setIsPeding(true);
+    if (!isOnline) {
+      notify.notif("error", "Please check your internet connection");
+      return;
+    }
+    setIsPending(true);
     try {
       const res = await api.get("/sensor/all", {
         params: {
@@ -35,11 +41,12 @@ const EmailData = ({ recipients, onClose }) => {
       }
       await sendEmail(emailData);
       notify.notif("success", "Email sent successfully.");
+      onClear();
       onClose();
     } catch (error) {
       notify.notif("error", "Something went wrong. Please try again.");
     } finally {
-      setIsPeding(false);
+      setIsPending(false);
     }
   };
 

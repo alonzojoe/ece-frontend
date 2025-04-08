@@ -143,3 +143,8 @@ export const logout = () => {
   localStorage.removeItem("auth-user");
   window.location.href = "/";
 };
+
+export const handlePhoneInput = (event) => {
+  const { value } = event.target;
+  event.target.value = value.replace(/\D/g, "").slice(0, 10);
+};

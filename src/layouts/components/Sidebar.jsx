@@ -2,10 +2,19 @@ import { Link } from "react-router-dom";
 import { MENUS } from "../../constants";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import MainLogo from "@/assets/images/main-logo.png";
 import { logout } from "@/libs/utils";
+import { getLocalStorage } from "@/libs/utils";
 
 const Sidebar = ({ toggleSidebar, isToggled }) => {
   const { pathname } = useLocation();
+  const user = getLocalStorage("auth-user");
+
+  console.log("sidebar user", user);
+
+  if (user.position_id != 1) {
+    MENUS.splice(1);
+  }
 
   return (
     <aside
@@ -19,20 +28,20 @@ const Sidebar = ({ toggleSidebar, isToggled }) => {
       }}
     >
       <div className="app-brand demo py-1 d-flex align-items-center">
-        <div>
+        <Link to="/home" className="app-brand-link align-items-center">
           <span className="app-brand-logo demo">
-            {/* <img
-              src="#"
+            <img
+              src={MainLogo}
               className="img-fluid"
               height="60"
               width="60"
               alt="cdh-logo"
-            /> */}
+            />
           </span>
           <span className="app-brand-text demo menu-text fw-bold mx-auto">
-            App - Name
+            BeamSensor109
           </span>
-        </div>
+        </Link>
         <a
           href="#"
           className="layout-menu-toggle menu-link text-large ms-auto mb-2"

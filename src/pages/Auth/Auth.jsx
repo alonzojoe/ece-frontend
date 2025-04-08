@@ -1,4 +1,5 @@
 import AuthImg from "@/assets/images/auth-img.png";
+import AuthImgv2 from "@/assets/images/authimg.png";
 import Light from "@/assets/images/light.png";
 import "@/assets/vendor/css/pages/page-auth.css";
 import useToggle from "@/hooks/useToggle";
@@ -24,7 +25,7 @@ const Auth = () => {
         <div className="d-none d-lg-flex col-lg-7 p-0">
           <div className="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
             <img
-              src={AuthImg}
+              src={AuthImgv2}
               alt="auth-register-cover"
               className="img-fluid my-5 auth-illustration"
               data-app-light-img="illustrations/auth-login-illustration-light.png"
