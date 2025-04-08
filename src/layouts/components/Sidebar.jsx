@@ -4,9 +4,17 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import MainLogo from "@/assets/images/main-logo.png";
 import { logout } from "@/libs/utils";
+import { getLocalStorage } from "@/libs/utils";
 
 const Sidebar = ({ toggleSidebar, isToggled }) => {
   const { pathname } = useLocation();
+  const user = getLocalStorage("auth-user");
+
+  console.log("sidebar user", user);
+
+  if (user.position_id != 1) {
+    MENUS.splice(1);
+  }
 
   return (
     <aside
