@@ -1,8 +1,7 @@
 import Modal from "@/components/UI/Modal";
-import Card from "@/components/UI/Card";
 import Pagination from "@/components/UI/Pagination";
 import useFetch from "@/hooks/useFetch";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import echo from "@/services/sockets";
 import {
   Notification,
@@ -12,9 +11,9 @@ import {
 } from "@/libs/utils.jsx";
 import Badge from "@/components/UI/Badge";
 import useToggle from "@/hooks/useToggle";
-import Swal from "sweetalert2";
 import api from "@/services/api";
 import SearchData from "./components/SearchData";
+import UserContext from "@/context/user-context";
 
 const notif = new Notification();
 const notify = new ToastMessage();
@@ -26,19 +25,19 @@ const output = (state, payload) => {
   switch (state) {
     case "normal":
       notif.normal(
-        `Readings: Load: ${payload.load} | Deflection: ${payload.deflection} | Angle of Deflection: ${payload.angle_of_deflection}`
+        `Readings: Load: ${payload.load} N | Deflection: ${payload.deflection} mm | Angle of Deflection: ${payload.angle_of_deflection} °`
       );
       break;
 
     case "warning":
       notif.warning(
-        `Readings: Load: ${payload.load} | Deflection: ${payload.deflection} | Angle of Deflection: ${payload.angle_of_deflection}`
+        `Readings: Load: ${payload.load} N | Deflection: ${payload.deflection} mm | Angle of Deflection: ${payload.angle_of_deflection} °`
       );
       break;
 
     case "critical":
       notif.critical(
-        `Readings: Load: ${payload.load} | Deflection: ${payload.deflection} | Angle of Deflection: ${payload.angle_of_deflection}`
+        `Readings: Load: ${payload.load} N | Deflection: ${payload.deflection} mm | Angle of Deflection: ${payload.angle_of_deflection} °`
       );
       break;
 
@@ -60,7 +59,7 @@ const initialState = {
 
 const Sensors = () => {
   const [params, setParams] = useState(initialState);
-
+  const { user } = useContext(UserContext);
   const [payload, setPayload] = useState({
     data: null,
     isPending: false,
@@ -111,7 +110,7 @@ const Sensors = () => {
       await api.put(`/sensor/update/${payload.data.id}`, {
         ...payload.data,
         building_name: buildingNameRef.current.value,
-        user_id: 1,
+        user_id: user.id,
       });
       notify.notif("success", "Sensor data updated successfully!");
       setParams((prev) => ({ ...prev, randomizer: Date.now() }));
