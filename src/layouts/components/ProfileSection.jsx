@@ -6,16 +6,10 @@ import ChangePassword from "./ChangePassword";
 import { useContext } from "react";
 import UserContext from "@/context/user-context";
 import { getLocalStorage, logout } from "@/libs/utils";
+import api from "@/services/api";
+import { ToastMessage } from "@/libs/utils";
 
-// const loggedUser = {
-//   id: 2,
-//   name: "Elie",
-//   email: "eli@gmail.com",
-//   phone: "9595626265",
-//   gender: "Female",
-//   position_id: "3",
-// };
-
+const notify = new ToastMessage();
 const ProfileSection = () => {
   const { data: positions } = useFetch("/position/all", {});
   const [updateForm, toggleUpdateForm] = useToggle(false);
@@ -37,6 +31,17 @@ const ProfileSection = () => {
   };
 
   const refresh = () => {};
+
+  const checkNotif = async () => {
+    try {
+      await api.get("/sensor/test");
+    } catch (error) {
+      notify.notif("error", `Websocket is not running`);
+    }
+    setTimeout(() => {
+      location.reload();
+    }, 1000);
+  };
 
   return (
     <>
@@ -107,6 +112,12 @@ const ProfileSection = () => {
             >
               <i className="ti ti-settings me-2 ti-sm"></i>
               <span className="align-middle">Settings</span>
+            </div>
+          </li>
+          <li>
+            <div className="dropdown-item cursor-pointer" onClick={checkNotif}>
+              <i className="ti ti-bell me-2 ti-sm"></i>
+              <span className="align-middle">Check Notification</span>
             </div>
           </li>
 

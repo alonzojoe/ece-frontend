@@ -7,7 +7,7 @@ const echo = new Echo({
   broadcaster: "pusher",
   key: "local",
   cluster: "mt1",
-  wsHost: "127.0.0.1",
+  wsHost: import.meta.env.VITE_SOCKET_URL,
   wsPort: 6001,
   forceTLS: false,
   disableStats: true,
