@@ -230,13 +230,13 @@ const NotifItem = React.memo(({ notif, onDelete }) => {
           {notif?.sensor_data && (
             <div className="mb-0 d-flex gap-1 flex-wrap">
               <small className="fw-semibold">
-                Load: {notif.sensor_data.load}
+                Load: {notif.sensor_data.load} N
               </small>
               <small className="fw-semibold">
-                Deflection: {notif.sensor_data.deflection}
+                Deflection: {notif.sensor_data.deflection} mm
               </small>
               <small className="fw-semibold">
-                Angle of Deflection: {notif.sensor_data.angle_of_deflection}
+                Angle of Deflection: {notif.sensor_data.angle_of_deflection} °
               </small>
             </div>
           )}
