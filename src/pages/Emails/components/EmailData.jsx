@@ -21,6 +21,7 @@ const EmailData = ({ recipients, onClose, onClear }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+
     if (!isOnline) {
       notify.notif("error", "Please check your internet connection");
       return;
@@ -39,12 +40,21 @@ const EmailData = ({ recipients, onClose, onClear }) => {
         notify.notif("error", "No results were found.");
         return;
       }
-      await sendEmail(emailData);
-      notify.notif("success", "Email sent successfully.");
-      onClear();
-      onClose();
+      const emailRes = await sendEmail(emailData);
+      console.log(emailRes);
+
+      if (emailRes && emailRes.success) {
+        notify.notif("success", "Email sent successfully.");
+        onClear();
+        onClose();
+      } else {
+        notify.notif(
+          "error",
+          "Failed to send email. Please check your internet connection."
+        );
+      }
     } catch (error) {
-      notify.notif("error", "Something went wrong. Please try again.");
+      notify.notif("error", "Something went wrong.");
     } finally {
       setIsPending(false);
     }
@@ -59,15 +69,18 @@ const EmailData = ({ recipients, onClose, onClear }) => {
   };
 
   const sendEmail = async (data) => {
-    console.log("recepients: ", recipients);
+    console.log("recipients: ", recipients);
     console.log("email data:", data);
     try {
-      await api.post("/notif/send-email", {
+      const res = await api.post("/notif/send-email", {
         recipients,
         data,
       });
+
+      return { success: true, data: res.data };
     } catch (e) {
       notify.notif("error", "Something went wrong.");
+      return { success: false, message: e.message };
     }
   };
 
