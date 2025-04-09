@@ -41,6 +41,10 @@ const output = (state, payload) => {
       );
       break;
 
+    case "check":
+      notif.normal(`Websocket is running!`);
+      break;
+
     default:
       console.error("Unknown state");
       break;
@@ -71,7 +75,7 @@ const Sensors = () => {
     const channel = echo.channel("sensor-data");
 
     channel.listen(".sensor.stored", (event) => {
-      console.log("New data has been stored:", event.sensorData);
+      console.log("New data has been stored:", event.sensorData.state);
       output(event.sensorData.state, event.sensorData);
       // notif.normal(`New data has been store: ${event.sensorData.load}`);
       // notif.warning(`New data has been store: ${event.sensorData.load}`);
@@ -162,6 +166,8 @@ const Sensors = () => {
       status: status,
     }));
   };
+
+  
 
   return (
     <>
