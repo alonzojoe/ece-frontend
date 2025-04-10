@@ -1,7 +1,10 @@
-import Modal from "@/components/UI/Modal";
-import Pagination from "@/components/UI/Pagination";
-import useFetch from "@/hooks/useFetch";
 import { useState, useEffect, useRef, useContext } from "react";
+import Pagination from "@/components/UI/Pagination";
+import Badge from "@/components/UI/Badge";
+import SearchData from "./components/SearchData";
+import ViewData from "./components/ViewData";
+import useFetch from "@/hooks/useFetch";
+import useToggle from "@/hooks/useToggle";
 import echo from "@/services/sockets";
 import {
   Notification,
@@ -9,11 +12,9 @@ import {
   ConfirmDialog,
   formatDateTime,
 } from "@/libs/utils.jsx";
-import Badge from "@/components/UI/Badge";
-import useToggle from "@/hooks/useToggle";
 import api from "@/services/api";
-import SearchData from "./components/SearchData";
 import UserContext from "@/context/user-context";
+import moment from "moment";
 
 const notif = new Notification();
 const notify = new ToastMessage();
@@ -102,9 +103,14 @@ const Sensors = () => {
     }));
   };
 
-  const update = (selected) => {
+  const view = (selected) => {
     console.log("selected data", selected);
-    setPayload((prev) => ({ ...prev, data: selected }));
+    const formatted = {
+      ...selected,
+      created_at: moment(selected.created_at).format("YYYY-MM-DDTHH:mm"), // Ensure it's formatted correctly
+    };
+    console.log("formatted", formatted);
+    setPayload((prev) => ({ ...prev, data: formatted }));
     toggleModal(true);
   };
 
@@ -169,112 +175,7 @@ const Sensors = () => {
 
   return (
     <>
-      {modal && (
-        <Modal
-          onClose={() => toggleModal(false)}
-          details={{ title: "Sensor Data" }}
-        >
-          <div className="p-2">
-            <div className="row my-2 ">
-              <div className="col-sm-12 col-md-12 col-lg-12 mb-2">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Building Name
-                  </label>
-                  <input
-                    ref={buildingNameRef}
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    defaultValue={payload.data.building_name}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Load (N)
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value={payload.data.load}
-                    disabled={true}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Deflection (mm)
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value={payload.data.deflection}
-                    disabled={true}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Angle of Deflection (°)
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm custom-font"
-                    value={payload.data.angle_of_deflection}
-                    disabled={true}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <label className="form-label fs-6 mb-2 fw-semibold">
-                    Status
-                  </label>
-                  <Badge state={payload.data.notification.state} />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4">
-                <div>
-                  <div
-                    className="d-flex gap-2 align-items-center"
-                    style={{
-                      marginTop: "1.7rem",
-                    }}
-                  >
-                    <button
-                      className="btn btn-primary d-flex gap-2 align-items-center"
-                      onClick={handleUpdate}
-                      disabled={payload.isPending}
-                    >
-                      <span>{payload.isPending ? "Updating" : "Update"}</span>
-                      {payload.isPending && (
-                        <div
-                          className="spinner-border text-white"
-                          role="status"
-                        >
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                      )}
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      // onClick={() => {
-                      //   notif.custom(`data has been inserted`);
-                      // }}
-                      onClick={() => toggleModal(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      )}
+      {modal && <ViewData payload={payload} onToggle={toggleModal} />}
       <div className="card mt-3">
         <SearchData onSearch={handleSearch} onRefresh={refresh} />
         <div className="table-responsive mt-3">
@@ -282,9 +183,9 @@ const Sensors = () => {
             <thead className="bg-primary">
               <tr style={{ textTransform: "capitalize" }}>
                 <th className="text-center text-white p-1 py-2 m-0">ID</th>
-                <th className="text-center text-white p-1 py-2 m-0">
+                {/* <th className="text-center text-white p-1 py-2 m-0">
                   Building Name
-                </th>
+                </th> */}
                 <th className="text-center text-white p-1 py-2 m-0">
                   Load (N)
                 </th>
@@ -307,7 +208,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="8"
+                    colSpan="7"
                   >
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="d-flex align-items-center jusitfy-content-center">
@@ -328,7 +229,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle text-danger fw-normal p-1 m-0"
-                    colSpan="8"
+                    colSpan="7"
                   >
                     Something went wrong :(
                   </td>
@@ -339,7 +240,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="8"
+                    colSpan="7"
                   >
                     No records found.
                   </td>
@@ -354,9 +255,9 @@ const Sensors = () => {
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.id}
                     </td>
-                    <td className="text-center align-middle fw-normal p-1 m-0">
+                    {/* <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.building_name}
-                    </td>
+                    </td> */}
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.load} N
                     </td>
@@ -376,9 +277,9 @@ const Sensors = () => {
                       <div className="d-flex align-items-center justify-content-center gap-2">
                         <button
                           className="btn btn-warning btn-sm"
-                          onClick={() => update(s)}
+                          onClick={() => view(s)}
                         >
-                          Update
+                          View
                         </button>
                         <button
                           className="btn btn-danger btn-sm"

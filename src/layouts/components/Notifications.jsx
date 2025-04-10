@@ -5,6 +5,8 @@ import React, { useState, useMemo, useEffect } from "react";
 import echo from "@/services/sockets";
 import { useLocation } from "react-router-dom";
 import { ConfirmDialog, ToastMessage, Notification } from "@/libs/utils";
+import ViewData from "@/pages/Sensors/components/ViewData";
+import moment from "moment";
 
 const initialParams = {
   showAll: false,
@@ -236,6 +238,9 @@ const Notifications = () => {
 export default React.memo(Notifications);
 
 const NotifItem = React.memo(({ notif, onDelete }) => {
+  const [payload, setPayload] = useState(null);
+  const [modal, toggleModal] = useToggle(false);
+
   const stateMapping = {
     normal: { label: "bg-label-success", icon: "ti ti-check", title: "Alert" },
     warning: {
@@ -252,47 +257,68 @@ const NotifItem = React.memo(({ notif, onDelete }) => {
 
   const { label, icon, title } = stateMapping[notif.state] || {};
 
+  const view = (data) => {
+    console.log("data", data);
+    setPayload({
+      data: {
+        ...data.sensor_data,
+        created_at: moment(data.sensor_data.created_at).format(
+          "YYYY-MM-DDTHH:mm"
+        ),
+        notification: {
+          state: data.state,
+        },
+      },
+    });
+
+    toggleModal(true);
+  };
+
   return (
-    <li
-      className="list-group-item list-group-item-action dropdown-notifications-item"
-      key={notif.id}
-    >
-      <div className="d-flex">
-        <div className="flex-shrink-0 me-3">
-          <div className="avatar">
-            <span className={`avatar-initial rounded-circle ${label}`}>
-              <i className={icon} />
+    <>
+      {modal && <ViewData payload={payload} onToggle={toggleModal} />}
+      <li
+        className="list-group-item list-group-item-action dropdown-notifications-item"
+        key={notif.id}
+        onClick={() => view(notif)}
+      >
+        <div className="d-flex">
+          <div className="flex-shrink-0 me-3">
+            <div className="avatar">
+              <span className={`avatar-initial rounded-circle ${label}`}>
+                <i className={icon} />
+              </span>
+            </div>
+          </div>
+          <div className="flex-grow-1">
+            <h6 className="mb-1">{title} Message</h6>
+            {notif?.sensor_data && (
+              <div className="mb-0 d-flex gap-1 flex-wrap">
+                <small className="fw-semibold">
+                  Load: {notif.sensor_data.load} N
+                </small>
+                <small className="fw-semibold">
+                  Deflection: {notif.sensor_data.deflection} mm
+                </small>
+                <small className="fw-semibold">
+                  Angle of Deflection: {notif.sensor_data.angle_of_deflection} °
+                </small>
+              </div>
+            )}
+          </div>
+          <div className="flex-shrink-0 dropdown-notifications-actions">
+            <span className="dropdown-notifications-read">
+              {notif.status === 1 && <span className="badge badge-dot"></span>}
+            </span>
+            <span
+              className="dropdown-notifications-archive cursor-pointer"
+              onClick={() => onDelete(notif.id)}
+            >
+              <span className="ti ti-x"></span>
             </span>
           </div>
         </div>
-        <div className="flex-grow-1">
-          <h6 className="mb-1">{title} Message</h6>
-          {notif?.sensor_data && (
-            <div className="mb-0 d-flex gap-1 flex-wrap">
-              <small className="fw-semibold">
-                Load: {notif.sensor_data.load} N
-              </small>
-              <small className="fw-semibold">
-                Deflection: {notif.sensor_data.deflection} mm
-              </small>
-              <small className="fw-semibold">
-                Angle of Deflection: {notif.sensor_data.angle_of_deflection} °
-              </small>
-            </div>
-          )}
-        </div>
-        <div className="flex-shrink-0 dropdown-notifications-actions">
-          <span className="dropdown-notifications-read">
-            {notif.status === 1 && <span className="badge badge-dot"></span>}
-          </span>
-          <span
-            className="dropdown-notifications-archive cursor-pointer"
-            onClick={() => onDelete(notif.id)}
-          >
-            <span className="ti ti-x"></span>
-          </span>
-        </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 });
