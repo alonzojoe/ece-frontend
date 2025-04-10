@@ -3,7 +3,8 @@ import useFetch from "@/hooks/useFetch";
 import api from "@/services/api";
 import React, { useState, useMemo, useEffect } from "react";
 import echo from "@/services/sockets";
-import { ConfirmDialog, ToastMessage } from "@/libs/utils";
+import { useLocation } from "react-router-dom";
+import { ConfirmDialog, ToastMessage, Notification } from "@/libs/utils";
 
 const initialParams = {
   showAll: false,
@@ -13,11 +14,46 @@ const initialParams = {
 
 const dialog = new ConfirmDialog();
 const notify = new ToastMessage();
+const notif = new Notification();
+const output = (state, payload) => {
+  // if (!state) return;
+
+  switch (state) {
+    case "normal":
+      notif.normal(
+        `Readings: Load: ${payload.load} N | Deflection: ${payload.deflection} mm | Angle of Deflection: ${payload.angle_of_deflection} °`
+      );
+      break;
+
+    case "warning":
+      notif.warning(
+        `Readings: Load: ${payload.load} N | Deflection: ${payload.deflection} mm | Angle of Deflection: ${payload.angle_of_deflection} °`
+      );
+      break;
+
+    case "critical":
+      notif.critical(
+        `Readings: Load: ${payload.load} N | Deflection: ${payload.deflection} mm | Angle of Deflection: ${payload.angle_of_deflection} °`
+      );
+      break;
+
+    case "check":
+      notif.normal(`Websocket is running!`);
+      break;
+
+    default:
+      console.error("Unknown state");
+      break;
+  }
+};
+
 const Notifications = () => {
   const [showNotif, toggleShowNotif] = useToggle(false);
   const [params, setParams] = useState(initialParams);
   const [isPending, setIsPending] = useState(false);
+  const { pathname } = useLocation();
 
+  console.log("loc", pathname);
   const {
     data: notifications,
     loading,
@@ -29,6 +65,10 @@ const Notifications = () => {
 
     channel.listen(".sensor.stored", (event) => {
       console.log("notif", event.sensorData);
+      if (pathname !== "/home") {
+        console.log("notif not in home component");
+        output(event.sensorData.state, event.sensorData);
+      }
 
       setParams((prev) => ({
         ...prev,
@@ -40,7 +80,7 @@ const Notifications = () => {
       channel.stopListening(".sensor.stored");
       echo.leaveChannel("sensor-data");
     };
-  }, []);
+  }, [pathname]);
 
   const toggleNotif = async () => {
     try {

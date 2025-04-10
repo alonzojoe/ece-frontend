@@ -167,8 +167,6 @@ const Sensors = () => {
     }));
   };
 
-  
-
   return (
     <>
       {modal && (
