@@ -14,6 +14,7 @@ import useToggle from "@/hooks/useToggle";
 import api from "@/services/api";
 import SearchData from "./components/SearchData";
 import UserContext from "@/context/user-context";
+import moment from "moment";
 
 const notif = new Notification();
 const notify = new ToastMessage();
@@ -104,7 +105,12 @@ const Sensors = () => {
 
   const update = (selected) => {
     console.log("selected data", selected);
-    setPayload((prev) => ({ ...prev, data: selected }));
+    const formatted = {
+      ...selected,
+      created_at: moment(selected.created_at).format("YYYY-MM-DDTHH:mm"), // Ensure it's formatted correctly
+    };
+    console.log("formatted", formatted);
+    setPayload((prev) => ({ ...prev, data: formatted }));
     toggleModal(true);
   };
 
@@ -236,6 +242,19 @@ const Sensors = () => {
                   <Badge state={payload.data.notification.state} />
                 </div>
               </div>
+              <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
+                <div>
+                  <label className="form-label fs-6 mb-2 fw-semibold">
+                    Created At
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className="form-control form-control-sm custom-font"
+                    value={payload.data.created_at}
+                    disabled={true}
+                  />
+                </div>
+              </div>
               <div className="col-sm-12 col-md-6 col-lg-4">
                 <div>
                   <div
@@ -266,7 +285,7 @@ const Sensors = () => {
                       // }}
                       onClick={() => toggleModal(false)}
                     >
-                      Cancel
+                      Close
                     </button>
                   </div>
                 </div>
@@ -354,9 +373,9 @@ const Sensors = () => {
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.id}
                     </td>
-                    <td className="text-center align-middle fw-normal p-1 m-0">
+                    {/* <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.building_name}
-                    </td>
+                    </td> */}
                     <td className="text-center align-middle fw-normal p-1 m-0">
                       {s.load} N
                     </td>
@@ -378,7 +397,7 @@ const Sensors = () => {
                           className="btn btn-warning btn-sm"
                           onClick={() => update(s)}
                         >
-                          Update
+                          View
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
