@@ -176,7 +176,7 @@ const Sensors = () => {
         >
           <div className="p-2">
             <div className="row my-2 ">
-              <div className="col-sm-12 col-md-12 col-lg-12 mb-2">
+              {/* <div className="col-sm-12 col-md-12 col-lg-12 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
                     Building Name
@@ -188,7 +188,7 @@ const Sensors = () => {
                     defaultValue={payload.data.building_name}
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
                 <div>
                   <label className="form-label fs-6 mb-2 fw-semibold">
@@ -244,7 +244,7 @@ const Sensors = () => {
                       marginTop: "1.7rem",
                     }}
                   >
-                    <button
+                    {/* <button
                       className="btn btn-primary d-flex gap-2 align-items-center"
                       onClick={handleUpdate}
                       disabled={payload.isPending}
@@ -258,7 +258,7 @@ const Sensors = () => {
                           <span className="visually-hidden">Loading...</span>
                         </div>
                       )}
-                    </button>
+                    </button> */}
                     <button
                       className="btn btn-danger"
                       // onClick={() => {
@@ -282,9 +282,9 @@ const Sensors = () => {
             <thead className="bg-primary">
               <tr style={{ textTransform: "capitalize" }}>
                 <th className="text-center text-white p-1 py-2 m-0">ID</th>
-                <th className="text-center text-white p-1 py-2 m-0">
+                {/* <th className="text-center text-white p-1 py-2 m-0">
                   Building Name
-                </th>
+                </th> */}
                 <th className="text-center text-white p-1 py-2 m-0">
                   Load (N)
                 </th>
@@ -307,7 +307,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="8"
+                    colSpan="7"
                   >
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="d-flex align-items-center jusitfy-content-center">
@@ -328,7 +328,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle text-danger fw-normal p-1 m-0"
-                    colSpan="8"
+                    colSpan="7"
                   >
                     Something went wrong :(
                   </td>
@@ -339,7 +339,7 @@ const Sensors = () => {
                 <tr>
                   <td
                     className="text-center align-middle fw-normal p-1 m-0"
-                    colSpan="8"
+                    colSpan="7"
                   >
                     No records found.
                   </td>
