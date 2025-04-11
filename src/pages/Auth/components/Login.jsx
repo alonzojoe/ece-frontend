@@ -92,8 +92,8 @@ const Login = ({ onToggle }) => {
             {errors.password?.message}
           </div>
         </div>
-        <div className="mb-3">
-          <div className="form-check">
+        <div className="mb-4">
+          {/* <div className="form-check">
             <input
               className="form-check-input"
               type="checkbox"
@@ -103,7 +103,7 @@ const Login = ({ onToggle }) => {
               {" "}
               Remember Me{" "}
             </label>
-          </div>
+          </div> */}
         </div>
         <button
           type="submit"
