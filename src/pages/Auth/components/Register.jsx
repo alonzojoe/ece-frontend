@@ -107,7 +107,7 @@ const Register = ({ onToggle, positions }) => {
             type="text"
             className="form-control"
             id={`${elId}-phone`}
-            maxLength={10}
+            maxLength={11}
             onChange={handlePhoneInput}
           />
           <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">

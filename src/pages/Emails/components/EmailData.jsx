@@ -10,6 +10,7 @@ const notify = new ToastMessage();
 const initialPayload = {
   date_from: moment().format("YYYY-MM-DD"),
   date_to: moment().format("YYYY-MM-DD"),
+  limit: 10,
 };
 
 console.log("init payload", initialPayload);
@@ -32,6 +33,7 @@ const EmailData = ({ recipients, onClose, onClear }) => {
         params: {
           date_from: moment(payload.date_from).format("YYYY-MM-DD"),
           date_to: moment(payload.date_to).format("YYYY-MM-DD"),
+          limit: payload.limit,
         },
       });
 
@@ -118,19 +120,23 @@ const EmailData = ({ recipients, onClose, onClear }) => {
                 onChange={handleChange}
               />
             </div>
-            {/* <div
-            className={`mb-2 fv-plugins-icon-container col-sm-12 col-md-6 col-lg-6`}
-          >
-            <label htmlFor={`date-from`} className="form-label">
-              Position
-            </label>
-            <select
-              name="date-from"
-              className="form-select form-control-sm custom-font"
-            >
-              <option value="">Please Select</option>
-            </select>
-          </div> */}
+            <div className={`mb-2 fv-plugins-icon-container col-12`}>
+              <label htmlFor={`limit`} className="form-label">
+                Limit
+              </label>
+              <select
+                name="limit"
+                className="form-select form-control-sm custom-font"
+                onChange={handleChange}
+                value={payload.limit}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+                <option value={40}>40</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
             <div className="col-12 mt-3">
               <button
                 className="btn btn-primary d-grid w-100 waves-effect waves-light d-flex gap-2 align-items-center"
