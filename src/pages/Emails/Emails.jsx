@@ -67,7 +67,7 @@ const Emails = () => {
 
   const sendEmail = async () => {
     if (selectedItems.length === 0)
-      return notify.notif("error", "Please select email recepients");
+      return notify.notif("error", "Please select email recipients");
     setShowEmail(true);
   };
 
