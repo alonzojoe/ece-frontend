@@ -281,12 +281,14 @@ const Sensors = () => {
                         >
                           View
                         </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelete(s.id)}
-                        >
-                          Delete
-                        </button>
+                        {s.status == 1 && (
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => handleDelete(s.id)}
+                          >
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
