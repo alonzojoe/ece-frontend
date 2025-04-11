@@ -113,7 +113,7 @@ const AddUser = ({ positions, onClose, onRefresh }) => {
                 type="text"
                 className="form-control"
                 id={`${elId}-phone`}
-                maxLength={10}
+                maxLength={11}
               />
               <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 {errors.phone?.message}

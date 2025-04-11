@@ -46,7 +46,7 @@ const AddUser = ({ positions, onClose, onRefresh }) => {
     }
   };
 
-  const choices = positions.data.filter((pos) => pos.id !== 1);
+  const choices = positions.data;
   if (!choices) return <p>Loading</p>;
   return (
     <Modal
@@ -113,7 +113,7 @@ const AddUser = ({ positions, onClose, onRefresh }) => {
                 type="text"
                 className="form-control"
                 id={`${elId}-phone`}
-                maxLength={10}
+                maxLength={11}
               />
               <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 {errors.phone?.message}
