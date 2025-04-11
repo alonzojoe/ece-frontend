@@ -19,6 +19,7 @@ const ProtectedRoutes = () => {
   const restrictedRoutes = ["/home/settings", "/home/notify", "/home/users"];
 
   if (
+    authUser &&
     authUser.position_id != 1 &&
     restrictedRoutes.includes(location.pathname)
   ) {
