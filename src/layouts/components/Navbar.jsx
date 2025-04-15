@@ -45,7 +45,7 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
             id="user-name"
           >
             <span className="nav-link hide-arrow">
-              <h5 className="mt-3 fw-bolder">{user?.name}</h5>
+              <h5 className="mt-3 fw-bolder">{user?.name.toUpperCase()}</h5>
             </span>
           </li>
 

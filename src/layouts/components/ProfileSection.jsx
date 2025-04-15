@@ -90,7 +90,9 @@ const ProfileSection = () => {
                   </div>
                 </div>
                 <div className="flex-grow-1">
-                  <span className="fw-medium d-block">{user?.name}</span>
+                  <span className="fw-medium d-block">
+                    {user?.name.toUpperCase()}
+                  </span>
                   <small className="text-muted">{user?.position?.name}</small>
                 </div>
               </div>

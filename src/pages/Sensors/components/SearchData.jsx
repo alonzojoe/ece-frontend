@@ -34,7 +34,7 @@ const SearchData = ({ onSearch, onRefresh }) => {
     <Card title="Search">
       <form onSubmit={handleSearch}>
         <div className="row mt-4">
-          <div className="col-sm-12 col-md-6 col-lg-3">
+          {/* <div className="col-sm-12 col-md-6 col-lg-3">
             <div>
               <label className="form-label fs-6 mb-2 fw-semibold">
                 Building Name
@@ -47,8 +47,8 @@ const SearchData = ({ onSearch, onRefresh }) => {
                 onChange={updateParams}
               />
             </div>
-          </div>
-          <div className="col-sm-12 col-md-6 col-lg-3">
+          </div> */}
+          <div className="col-sm-12 col-md-6 col-lg-4">
             <div>
               <label className="form-label fs-6 mb-2 fw-semibold">Load</label>
               <input
@@ -60,7 +60,7 @@ const SearchData = ({ onSearch, onRefresh }) => {
               />
             </div>
           </div>
-          <div className="col-sm-12 col-md-6 col-lg-3">
+          <div className="col-sm-12 col-md-6 col-lg-4">
             <div>
               <label className="form-label fs-6 mb-2 fw-semibold">
                 Deflection
@@ -74,7 +74,7 @@ const SearchData = ({ onSearch, onRefresh }) => {
               />
             </div>
           </div>
-          <div className="col-sm-12 col-md-6 col-lg-3">
+          <div className="col-sm-12 col-md-6 col-lg-4">
             <div>
               <label className="form-label fs-6 mb-2 fw-semibold">
                 Angle of Deflection
@@ -90,7 +90,7 @@ const SearchData = ({ onSearch, onRefresh }) => {
           </div>
         </div>
         <div className="row mt-3">
-          <div className="col-sm-12 col-md-6 col-lg-3">
+          <div className="col-sm-12 col-md-6 col-lg-4">
             <div>
               <label className="form-label fs-6 mb-2 fw-semibold">Status</label>
               <select
@@ -104,7 +104,7 @@ const SearchData = ({ onSearch, onRefresh }) => {
               </select>
             </div>
           </div>
-          <div className="col-sm-12 col-md-6 col-lg-3">
+          <div className="col-sm-12 col-md-6 col-lg-4">
             <div
               className="d-flex gap-2 align-items-center"
               style={{
