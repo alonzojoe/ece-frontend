@@ -13,33 +13,31 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
       id="layout-navbar"
     >
       <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-        <div className="d-flex align-items-center gap-3">
-          <a
-            className="nav-item nav-link px-0 me-xl-4"
-            onClick={() => toggleSidebar()}
-          >
-            <i className="ti ti-menu-2 ti-sm"></i>
-          </a>
-          {/* <span>{JSON.stringify(showNotif)}</span> */}
-          <div className="demo-vertical-spacing-n btn-switch">
-            <div className="has-error">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  className="switch-input switch-input"
-                  onChange={toggleNotif}
-                  checked={showNotif}
-                  // true-value={true}
-                  // false-value={false}
-                />
-                <span className="switch-toggle-slider">
-                  <span className="switch-on"></span>
-                  <span className="switch-off"></span>
-                </span>
-                <span className="switch-label"></span>
-              </label>
-            </div>
-          </div>
+        <a
+          className="nav-item nav-link px-0 me-xl-4"
+          onClick={() => toggleSidebar()}
+        >
+          <i className="ti ti-menu-2 ti-sm"></i>
+        </a>
+        {/* <span>{JSON.stringify(showNotif)}</span> */}
+      </div>
+      <div className="demo-vertical-spacing-n btn-switch">
+        <div className="has-error">
+          <label className="switch">
+            <input
+              type="checkbox"
+              className="switch-input switch-input"
+              onChange={toggleNotif}
+              checked={showNotif}
+              // true-value={true}
+              // false-value={false}
+            />
+            <span className="switch-toggle-slider">
+              <span className="switch-on"></span>
+              <span className="switch-off"></span>
+            </span>
+            <span className="switch-label"></span>
+          </label>
         </div>
       </div>
 
