@@ -2,6 +2,7 @@ import ProfileSection from "@/layouts/components/ProfileSection";
 import Notifications from "./Notifications";
 import UserContext from "@/context/user-context";
 import { useContext } from "react";
+import NotifContext from "@/context/notification-context";
 
 const Navbar = ({ toggleSidebar, isToggled }) => {
   const { user } = useContext(UserContext);
@@ -12,12 +13,33 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
       id="layout-navbar"
     >
       <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-        <a
-          className="nav-item nav-link px-0 me-xl-4"
-          onClick={() => toggleSidebar()}
-        >
-          <i className="ti ti-menu-2 ti-sm"></i>
-        </a>
+        <div className="d-flex align-items-center gap-3">
+          <a
+            className="nav-item nav-link px-0 me-xl-4"
+            onClick={() => toggleSidebar()}
+          >
+            <i className="ti ti-menu-2 ti-sm"></i>
+          </a>
+          <div className="demo-vertical-spacing-n btn-switch">
+            <div className="has-error">
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  className="switch-input switch-input"
+                  // onChange={toggleNotif}
+                  // checked={showNotif}
+                  // true-value={true}
+                  // false-value={false}
+                />
+                <span className="switch-toggle-slider">
+                  <span className="switch-on"></span>
+                  <span className="switch-off"></span>
+                </span>
+                <span className="switch-label"></span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div
