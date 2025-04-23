@@ -1,11 +1,12 @@
 import useToggle from "@/hooks/useToggle";
 import useFetch from "@/hooks/useFetch";
 import api from "@/services/api";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
 import echo from "@/services/sockets";
 import { useLocation } from "react-router-dom";
 import { ConfirmDialog, ToastMessage, Notification } from "@/libs/utils";
 import ViewData from "@/pages/Sensors/components/ViewData";
+import NotifContext from "@/context/notification-context";
 import moment from "moment";
 
 const initialParams = {
@@ -54,7 +55,7 @@ const Notifications = () => {
   const [params, setParams] = useState(initialParams);
   const [isPending, setIsPending] = useState(false);
   const { pathname } = useLocation();
-
+  const { showNotif: displayNotif } = useContext(NotifContext);
   console.log("loc", pathname);
   const {
     data: notifications,
@@ -67,22 +68,22 @@ const Notifications = () => {
 
     channel.listen(".sensor.stored", (event) => {
       console.log("notif", event.sensorData);
-      if (pathname !== "/home") {
+      if (pathname !== "/home" && displayNotif) {
         console.log("notif not in home component");
         output(event.sensorData.state, event.sensorData);
-      }
 
-      setParams((prev) => ({
-        ...prev,
-        random: Date.now(),
-      }));
+        setParams((prev) => ({
+          ...prev,
+          random: Date.now(),
+        }));
+      }
     });
 
     return () => {
       channel.stopListening(".sensor.stored");
       echo.leaveChannel("sensor-data");
     };
-  }, [pathname]);
+  }, [pathname, displayNotif]);
 
   const toggleNotif = async () => {
     try {

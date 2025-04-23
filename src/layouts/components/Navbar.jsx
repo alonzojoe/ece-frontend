@@ -6,7 +6,7 @@ import NotifContext from "@/context/notification-context";
 
 const Navbar = ({ toggleSidebar, isToggled }) => {
   const { user } = useContext(UserContext);
-
+  const { showNotif, toggleNotif } = useContext(NotifContext);
   return (
     <nav
       className="navbar-main m-0 rounded-0 w-auto layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme container-fluid"
@@ -20,14 +20,15 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
           >
             <i className="ti ti-menu-2 ti-sm"></i>
           </a>
+          {/* <span>{JSON.stringify(showNotif)}</span> */}
           <div className="demo-vertical-spacing-n btn-switch">
             <div className="has-error">
               <label className="switch">
                 <input
                   type="checkbox"
                   className="switch-input switch-input"
-                  // onChange={toggleNotif}
-                  // checked={showNotif}
+                  onChange={toggleNotif}
+                  checked={showNotif}
                   // true-value={true}
                   // false-value={false}
                 />

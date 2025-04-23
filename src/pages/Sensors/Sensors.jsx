@@ -15,6 +15,7 @@ import {
 import api from "@/services/api";
 import UserContext from "@/context/user-context";
 import moment from "moment";
+import NotifContext from "@/context/notification-context";
 
 const notif = new Notification();
 const notify = new ToastMessage();
@@ -72,27 +73,30 @@ const Sensors = () => {
   const buildingNameRef = useRef(null);
   const { data: sensors, loading, error } = useFetch(`/sensor`, params);
   const [modal, toggleModal] = useToggle(false);
+  const { showNotif: displayNotif } = useContext(NotifContext);
   useEffect(() => {
     const channel = echo.channel("sensor-data");
 
     channel.listen(".sensor.stored", (event) => {
-      console.log("New data has been stored:", event.sensorData.state);
-      output(event.sensorData.state, event.sensorData);
-      // notif.normal(`New data has been store: ${event.sensorData.load}`);
-      // notif.warning(`New data has been store: ${event.sensorData.load}`);
-      // notif.critical(`New data has been store: ${event.sensorData.load}`);
+      if (displayNotif) {
+        console.log("New data has been stored:", event.sensorData.state);
+        output(event.sensorData.state, event.sensorData);
+        // notif.normal(`New data has been store: ${event.sensorData.load}`);
+        // notif.warning(`New data has been store: ${event.sensorData.load}`);
+        // notif.critical(`New data has been store: ${event.sensorData.load}`);
 
-      setParams((prev) => ({
-        ...prev,
-        randomizer: Date.now(),
-      }));
+        setParams((prev) => ({
+          ...prev,
+          randomizer: Date.now(),
+        }));
+      }
     });
 
     return () => {
       channel.stopListening(".sensor.stored");
       echo.leaveChannel("sensor-data");
     };
-  }, []);
+  }, [displayNotif]);
 
   console.log("data", sensors, error);
 
