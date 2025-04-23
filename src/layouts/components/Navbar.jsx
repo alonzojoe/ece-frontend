@@ -2,10 +2,11 @@ import ProfileSection from "@/layouts/components/ProfileSection";
 import Notifications from "./Notifications";
 import UserContext from "@/context/user-context";
 import { useContext } from "react";
+import NotifContext from "@/context/notification-context";
 
 const Navbar = ({ toggleSidebar, isToggled }) => {
   const { user } = useContext(UserContext);
-
+  const { showNotif, toggleNotif } = useContext(NotifContext);
   return (
     <nav
       className="navbar-main m-0 rounded-0 w-auto layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme container-fluid"
@@ -18,6 +19,26 @@ const Navbar = ({ toggleSidebar, isToggled }) => {
         >
           <i className="ti ti-menu-2 ti-sm"></i>
         </a>
+        {/* <span>{JSON.stringify(showNotif)}</span> */}
+      </div>
+      <div className="demo-vertical-spacing-n btn-switch">
+        <div className="has-error">
+          <label className="switch">
+            <input
+              type="checkbox"
+              className="switch-input switch-input"
+              onChange={toggleNotif}
+              checked={showNotif}
+              // true-value={true}
+              // false-value={false}
+            />
+            <span className="switch-toggle-slider">
+              <span className="switch-on"></span>
+              <span className="switch-off"></span>
+            </span>
+            <span className="switch-label"></span>
+          </label>
+        </div>
       </div>
 
       <div

@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import moment from "moment";
 import api from "@/services/api";
 export class Notification {
-  normal(message, position = "top-right") {
+  normal(message, position = "top-center") {
     toast.custom(
       <div
         className="d-flex gap-2"
@@ -30,7 +30,7 @@ export class Notification {
     );
   }
 
-  warning(message, position = "top-right") {
+  warning(message, position = "top-center") {
     toast.custom(
       <div
         className="d-flex gap-2"
@@ -57,7 +57,7 @@ export class Notification {
     );
   }
 
-  critical(message, position = "top-right") {
+  critical(message, position = "top-center") {
     toast.custom(
       <div
         className="d-flex gap-2"
@@ -84,7 +84,7 @@ export class Notification {
     );
   }
 
-  custom(message, position = "top-right") {
+  custom(message, position = "top-center") {
     this.normal(message);
     this.warning(message);
     this.critical(message);

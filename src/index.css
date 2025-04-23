@@ -302,3 +302,7 @@ html:not([dir="rtl"]) .app-brand-text {
   width: 100vw;
   background: #ffffff;
 }
+
+.demo-vertical-spacing-n {
+  margin-top: 0 !important;
+}
